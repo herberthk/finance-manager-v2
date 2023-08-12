@@ -1,34 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Finance manager
 
-## Getting Started
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fe7b07987f4c43e39f434c7fdf67d22c)](https://app.codacy.com/gh/BuildForSDGCohort2/Team-229N-finance-manager-frontend?utm_source=github.com&utm_medium=referral&utm_content=BuildForSDGCohort2/Team-229N-finance-manager-frontend&utm_campaign=Badge_Grade_Settings)[![Actions Status](https://github.com/BuildForSDGCohort2/team-229N-finance-manager-frontend/workflows/Build%20and%20Test/badge.svg)](https://github.com/BuildForSDGCohort2/team-229N-finance-manager-frontend/actions)
 
-First, run the development server:
+![Finace manager](src/asset/finance.svg)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+> Finance manager is the online accounting software for small and medium enterprises. This softwares aims to bridge knowledge gap of young africans with no accounting background.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> This software also aims to minimise the complexity of book keeping by providing automated generation of financial statements like business journals, ledgers, Trial balance, Income statement, cashbooks, and balance sheet basing on data of the company provided through our easy to use user interface.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Dashboard preview
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+![Dashboard preview](img/dash.png)
 
-## Learn More
+## Technology stack
 
-To learn more about Next.js, take a look at the following resources:
+- Typescript
+- Reactjs, Redux, styled-components, saas, react-motion (Frontend).
+- Nodejs, express, (Backend)
+- MongoDb (database)
+- Node mailer (For authorization codes)
+- React testing library, Jest (For intergration and End to end testing)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Security.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Two factor authentication
 
-## Deploy on Vercel
+## Software Features.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### TODO.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [x] Two factor authentication
+- [x] Journals
+- [x] Ledgers
+- [x] Cashbooks
+- [x] Trial balance
+- [x] Income statement (Statement of financial position)
+- [x] Balance sheet
+- [ ] Payroll
+- [x] Printable reports
+- [x] Stock management
