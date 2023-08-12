@@ -1,0 +1,45 @@
+import type { AssetType, Direction } from ".";
+
+export interface CreateCompanyState {
+  step: number;
+  bankBalance?: string;
+  cashBalance?: string;
+  landValue?: string;
+  machineValue?: string;
+  vehicleValue?: string;
+  name?: string;
+  description?: string;
+  accountNumber?: string;
+  telephone?: string;
+  email?: string;
+  location?: string;
+  facebook?: string;
+  twitter?: string;
+  youtube?: string;
+  assets: AssetType[];
+  assetSkipped: boolean;
+  wizardDirection: Direction;
+  completedSteps: { [k: number]: boolean };
+  setCompletedStep: (k: number) => void;
+  setWizardDirection: (dir: Direction) => void;
+  skipAssetStep: (state: boolean) => void;
+  addAsset: (asset: AssetType) => void;
+  removeAsset: (asset: AssetType) => void;
+  resetCompanyData: () => void;
+  nextStep: () => void;
+  prevStep: () => void;
+  setBankBalance: (amount: string) => void;
+  setCashBalance: (amount: string) => void;
+  setLandValue: (amount: string) => void;
+  setMachineValue: (amount: string) => void;
+  setVehicleValue: (amount: string) => void;
+  setName: (name: string) => void;
+  setDescription: (desc: string) => void;
+  setAccount: (account: string) => void;
+  setTelephone: (tel: string) => void;
+  setEmail: (email: string) => void;
+  setLocation: (loc: string) => void;
+  setFacebook: (fb: string) => void;
+  setTwitter: (t: string) => void;
+  setYoutube: (yt: string) => void;
+}

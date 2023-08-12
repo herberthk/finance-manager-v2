@@ -1,0 +1,91 @@
+h1 {
+  font-size: 40px;
+}
+
+p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.button {
+  display: inline-block;
+  border: 0;
+  color: $texColor;
+  border-radius: 20px;
+  padding: 8px 30px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: all 0.5s linear;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.18);
+  }
+}
+
+.login_bg {
+  color: $texColor;
+  overflow-x: hidden;
+  background-attachment: fixed;
+  background-image: url('../../public/assets/bg.jpg');
+  background-repeat: no-repeat;
+  background-color: $primaryColor;
+  background-size: cover;
+}
+
+.field {
+  position: relative !important;
+  margin-top: 0 !important;
+}
+
+.input_border:focus ~ span {
+  width: calc(100% - 3rem);
+}
+
+.input_border {
+  border-bottom: 1px solid #ccc !important;
+}
+
+.primary-text {
+  color: $primaryColor;
+}
+
+.secondary-text {
+  color: $secondaryColor;
+}
+
+.home_title {
+  font-family: 'BlackOpsOne-Regular';
+  font-size: 32px;
+  text-transform: uppercase;
+}
+
+.fullPage {
+  height: 100vh;
+}
+
+#section3 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  // background-color: red;
+  // margin-bottom: 0 !important;
+}
+
+.auth_bg {
+  color: $texColor;
+  background-image: url('../../public/assets/bg.jpg');
+  background-repeat: no-repeat;
+  background-color: $primaryColor;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.security_top {
+  padding: 1rem;
+  text-align: center;
+  font-style: italic;
+  // font-size: 14px;
+}
