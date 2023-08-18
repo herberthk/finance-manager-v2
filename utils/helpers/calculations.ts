@@ -1,7 +1,5 @@
 import type { DataArray } from "@/redux/interface";
 
-import { useCustomDispatch } from "./hooks";
-
 export const numberWithCommas = (x: number): string => {
   return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
@@ -33,6 +31,7 @@ export const getTotalDebit = (num: DataArray[]): number => {
 
   return total;
 };
+
 export const getTotalCredit = (num: DataArray[]): number => {
   let total = 0;
   num.forEach((c) => {
@@ -42,45 +41,27 @@ export const getTotalCredit = (num: DataArray[]): number => {
   return total;
 };
 
-export const printContent = (el: string): void => {
-  const restorepage = document.body.innerHTML;
-  const printcontent = document.getElementById(el)?.innerHTML;
-  document.body.innerHTML = printcontent;
-  window.print();
-  document.body.innerHTML = restorepage;
-};
+// export const useFreshAccountData = (data: Data): void => {
+//   const {
+//     getBank,
+//     getCapital,
+//     getCash,
+//     getJournal,
+//     getLand,
+//     getMachine,
+//     getVehicle,
+//   } = useCustomDispatch();
 
-interface Data {
-  bank: DataArray;
-  capital: DataArray;
-  cash: DataArray;
-  journal: DataArray;
-  land: DataArray;
-  machine: DataArray;
-  vehicle: DataArray;
-}
-
-export const useFreshAccountData = (data: Data): void => {
-  const {
-    getBank,
-    getCapital,
-    getCash,
-    getJournal,
-    getLand,
-    getMachine,
-    getVehicle,
-  } = useCustomDispatch();
-
-  (async () => {
-    await getBank(data.bank);
-    await getCapital(data.capital);
-    await getCash(data.cash);
-    await getJournal(data.journal);
-    await getLand(data.land);
-    await getMachine(data.machine);
-    await getVehicle(data.vehicle);
-  })();
-};
+//   (async () => {
+//     await getBank(data.bank);
+//     await getCapital(data.capital);
+//     await getCash(data.cash);
+//     await getJournal(data.journal);
+//     await getLand(data.land);
+//     await getMachine(data.machine);
+//     await getVehicle(data.vehicle);
+//   })();
+// };
 export const arrayCrDiffTotal = (num: DataArray[]): number => {
   let ttdr = 0;
   let ttcr = 0;
@@ -94,3 +75,13 @@ export const arrayCrDiffTotal = (num: DataArray[]): number => {
 
 export const upperFirst = (str: string): string =>
   str.charAt(0).toUpperCase() + str.slice(1);
+
+export const generateCode = (len: number = 8): string => {
+  let result = "";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let charactersLength = characters.length;
+  for (let i = 0; i < len; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};

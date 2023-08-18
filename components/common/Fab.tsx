@@ -1,3 +1,4 @@
+"use client";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import M from "materialize-css";
 import { useRouter } from "next/navigation";

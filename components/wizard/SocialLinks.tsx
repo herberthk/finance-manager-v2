@@ -1,25 +1,29 @@
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
-import { useCompanyStore } from "@/zustand/store";
+import { useCreateCompanyStore } from "@/zustand";
 
 const Step5 = (): React.ReactNode => {
   useEffect(() => {
     M.updateTextFields();
   }, []);
 
-  const nextStep = useCompanyStore((state) => state.nextStep);
-  const prevStep = useCompanyStore((state) => state.prevStep);
-  const fb = useCompanyStore((state) => state.facebook);
-  const setFb = useCompanyStore((state) => state.setFacebook);
-  const setTwt = useCompanyStore((state) => state.setTwitter);
-  const setYt = useCompanyStore((state) => state.setYoutube);
-  const twt = useCompanyStore((state) => state.twitter);
-  const yt = useCompanyStore((state) => state.youtube);
-  const setCompletedStep = useCompanyStore((state) => state.setCompletedStep);
-  const currentStep = useCompanyStore((state) => state.step);
-  const wizardDirection = useCompanyStore((state) => state.wizardDirection);
-  const setWizardDirection = useCompanyStore(
+  const nextStep = useCreateCompanyStore((state) => state.nextStep);
+  const prevStep = useCreateCompanyStore((state) => state.prevStep);
+  const fb = useCreateCompanyStore((state) => state.facebook);
+  const setFb = useCreateCompanyStore((state) => state.setFacebook);
+  const setTwt = useCreateCompanyStore((state) => state.setTwitter);
+  const setYt = useCreateCompanyStore((state) => state.setYoutube);
+  const twt = useCreateCompanyStore((state) => state.twitter);
+  const yt = useCreateCompanyStore((state) => state.youtube);
+  const setCompletedStep = useCreateCompanyStore(
+    (state) => state.setCompletedStep,
+  );
+  const currentStep = useCreateCompanyStore((state) => state.step);
+  const wizardDirection = useCreateCompanyStore(
+    (state) => state.wizardDirection,
+  );
+  const setWizardDirection = useCreateCompanyStore(
     (state) => state.setWizardDirection,
   );
   const next = () => {

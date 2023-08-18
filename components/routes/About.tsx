@@ -1,30 +1,20 @@
+"use client";
 import { motion } from "framer-motion";
 import M from "materialize-css";
-import type { FC } from "react";
 import React, { useLayoutEffect } from "react";
 
-import type { CompanyProps } from "@/types";
-import { routeVariants } from "@/utils/variables";
+import { routeVariants } from "@/utils";
+import { useCompanyStore } from "@/zustand";
 
 import { Collapsible } from "../common/comps";
-// import { persistStore, persistReducer } from 'redux-persist';
-// import ReactPlaceholder from "react-placeholder";
-// import ReactHtmlParser from "react-html-parser";
-// import { Helmet } from "react-helmet";
-const About: FC<CompanyProps> = ({
-  bank,
-  desc,
-  email,
-  fb,
-  location,
-  name,
-  tel,
-  twt,
-  yt,
-}) => {
+
+const About = (): React.ReactNode => {
   useLayoutEffect(() => {
     M.AutoInit();
   }, []);
+
+  const company = useCompanyStore((state) => state.company);
+  // const facebook = Object.values(company?.social_links)
   return (
     <motion.div
       initial="exit"
@@ -35,21 +25,21 @@ const About: FC<CompanyProps> = ({
         <li>
           <div className="collapsible-header black-text">
             <i className="fas fa-address-card"></i>
-            {name.toUpperCase()} BASIC INFORMATION
+            {company?.name.toUpperCase()} BASIC INFORMATION
           </div>
           <div className="collapsible-body black-text collapsible_overide">
             <Collapsible>
               <div>
                 <i className="material-icons">info</i>
               </div>
-              <div>{desc}</div>
+              <div>{company?.description}</div>
             </Collapsible>
-            {bank ? (
+            {company?.account_number ? (
               <Collapsible>
                 <div>
                   <i className="material-icons">account_balance</i>
                 </div>
-                <div>{bank}</div>
+                <div>{company.account_number}</div>
               </Collapsible>
             ) : null}
           </div>
@@ -60,12 +50,12 @@ const About: FC<CompanyProps> = ({
             CONTACT INFORMATION
           </div>
           <div className="collapsible-body black-text collapsible_overide">
-            {tel ? (
+            {company?.phone ? (
               <Collapsible>
                 <div>
                   <i className="material-icons">phone</i>
                 </div>
-                <div>{tel}</div>
+                <div>{company?.phone}</div>
               </Collapsible>
             ) : null}
 
@@ -73,14 +63,14 @@ const About: FC<CompanyProps> = ({
               <div>
                 <i className="material-icons">drafts</i>
               </div>
-              <div>{email}</div>
+              <div>{company?.email}</div>
             </Collapsible>
             {location ? (
               <Collapsible>
                 <div>
                   <i className="material-icons">location_on</i>
                 </div>
-                <div>{location}</div>
+                <div>{company?.location}</div>
               </Collapsible>
             ) : null}
           </div>
@@ -90,8 +80,8 @@ const About: FC<CompanyProps> = ({
             <i className="material-icons">forum</i>SOCIAL MEDIA CONTACTS
           </div>
           <div className="collapsible-body black-text collapsible_overide">
-            {!twt && !fb && yt && <p>Nothing Provided</p>}
-            {fb ? (
+            {/* {!Object.values(company?.social_links) && <p>Nothing Provided</p>} */}
+            {/* {company ? (
               <Collapsible>
                 <div>
                   <i className="fab fa-facebook"></i>
@@ -114,7 +104,7 @@ const About: FC<CompanyProps> = ({
                 </div>
                 <div>{yt}</div>
               </Collapsible>
-            ) : null}
+            ) : null} */}
           </div>
         </li>
       </ul>

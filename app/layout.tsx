@@ -1,5 +1,3 @@
-"use client";
-// export const dynamic = "force-dynamic";
 import "@/styles/globals.css";
 import "@/styles/materialize.css";
 import "@/styles/main.scss";
@@ -7,9 +5,6 @@ import "@/styles/main.scss";
 import { Inter } from "next/font/google";
 import type { FC } from "react";
 import React from "react";
-import { Provider } from "react-redux";
-
-import { store } from "@/redux/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,11 +24,9 @@ const RootLayout: FC<Props> = ({ children }) => {
         <meta name="description" content="Online financial accounting" />
       </head>
       <body className={inter.className}>
-        <Provider store={store}>
-          {/* <CssBaseline /> */}
+        {/* <CssBaseline /> */}
 
-          {children}
-        </Provider>
+        {children}
       </body>
     </html>
   );

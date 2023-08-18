@@ -1,49 +1,23 @@
 import type { ReactNode } from "react";
+
+import type { Database } from "./database.types";
 export * from "./database.types";
+export * from "./graph";
 export * from "./store";
 
 export type AssetType = "land" | "vehicle" | "machine";
 export type Direction = "next" | "previous";
-export interface AxiosResponse {
-  success: Boolean;
-  error: string;
-  data: {
-    name: string;
-    _id: string;
-    email: string;
-  };
-  token: string;
-  info: string;
-}
+export type User = Database["public"]["Tables"]["users"]["Row"];
+export type Company = Database["public"]["Tables"]["company"]["Row"];
+export type Bank = Database["public"]["Tables"]["bank"]["Row"];
+export type Capital = Database["public"]["Tables"]["capital"]["Row"];
 
-export interface CompanyResponse {
-  success: Boolean;
-  error: string;
-  data: {
-    name: string;
-    email: string;
-    location: string;
-    desc: string;
-    fb: string;
-    yt: string;
-    twt: string;
-    tel: string;
-    bank: string;
-  };
-}
-
-export interface CompanyProps {
-  _id: string;
-  name: string;
-  email: string;
-  location: string;
-  desc: string;
-  fb: string;
-  yt: string;
-  twt: string;
-  tel: string;
-  bank: string;
-}
+export type DebitCredit = {
+  amount: number;
+  details: string;
+  createdat: string;
+  code?: string;
+};
 
 export interface NavLinks {
   route: string;

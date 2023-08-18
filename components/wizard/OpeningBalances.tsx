@@ -1,23 +1,27 @@
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
-import { useCompanyStore } from "@/zustand/store";
+import { useCreateCompanyStore } from "@/zustand";
 
 const OpeningBalances = (): React.ReactNode => {
   useEffect(() => {
     M.updateTextFields();
   }, []);
 
-  const nextStep = useCompanyStore((state) => state.nextStep);
-  const prevStep = useCompanyStore((state) => state.prevStep);
-  const cashBal = useCompanyStore((state) => state.cashBalance);
-  const bankBal = useCompanyStore((state) => state.bankBalance);
-  const setCashBal = useCompanyStore((state) => state.setCashBalance);
-  const setBankBal = useCompanyStore((state) => state.setBankBalance);
-  const wizardDirection = useCompanyStore((state) => state.wizardDirection);
-  const setCompletedStep = useCompanyStore((state) => state.setCompletedStep);
-  const currentStep = useCompanyStore((state) => state.step);
-  const setWizardDirection = useCompanyStore(
+  const nextStep = useCreateCompanyStore((state) => state.nextStep);
+  const prevStep = useCreateCompanyStore((state) => state.prevStep);
+  const cashBal = useCreateCompanyStore((state) => state.cashBalance);
+  const bankBal = useCreateCompanyStore((state) => state.bankBalance);
+  const setCashBal = useCreateCompanyStore((state) => state.setCashBalance);
+  const setBankBal = useCreateCompanyStore((state) => state.setBankBalance);
+  const wizardDirection = useCreateCompanyStore(
+    (state) => state.wizardDirection,
+  );
+  const setCompletedStep = useCreateCompanyStore(
+    (state) => state.setCompletedStep,
+  );
+  const currentStep = useCreateCompanyStore((state) => state.step);
+  const setWizardDirection = useCreateCompanyStore(
     (state) => state.setWizardDirection,
   );
   const next = () => {

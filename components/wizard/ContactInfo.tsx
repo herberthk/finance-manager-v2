@@ -1,24 +1,28 @@
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
-import { useCompanyStore } from "@/zustand/store";
+import { useCreateCompanyStore } from "@/zustand";
 
 const ContactInfo = (): React.ReactNode => {
   useEffect(() => {
     M.updateTextFields();
   }, []);
-  const nextStep = useCompanyStore((state) => state.nextStep);
-  const prevStep = useCompanyStore((state) => state.prevStep);
-  const email = useCompanyStore((state) => state.email);
-  const location = useCompanyStore((state) => state.location);
-  const setEmail = useCompanyStore((state) => state.setEmail);
-  const setLocation = useCompanyStore((state) => state.setLocation);
-  const setTel = useCompanyStore((state) => state.setTelephone);
-  const tel = useCompanyStore((state) => state.telephone);
-  const wizardDirection = useCompanyStore((state) => state.wizardDirection);
-  const setCompletedStep = useCompanyStore((state) => state.setCompletedStep);
-  const currentStep = useCompanyStore((state) => state.step);
-  const setWizardDirection = useCompanyStore(
+  const nextStep = useCreateCompanyStore((state) => state.nextStep);
+  const prevStep = useCreateCompanyStore((state) => state.prevStep);
+  const email = useCreateCompanyStore((state) => state.email);
+  const location = useCreateCompanyStore((state) => state.location);
+  const setEmail = useCreateCompanyStore((state) => state.setEmail);
+  const setLocation = useCreateCompanyStore((state) => state.setLocation);
+  const setTel = useCreateCompanyStore((state) => state.setTelephone);
+  const tel = useCreateCompanyStore((state) => state.telephone);
+  const wizardDirection = useCreateCompanyStore(
+    (state) => state.wizardDirection,
+  );
+  const setCompletedStep = useCreateCompanyStore(
+    (state) => state.setCompletedStep,
+  );
+  const currentStep = useCreateCompanyStore((state) => state.step);
+  const setWizardDirection = useCreateCompanyStore(
     (state) => state.setWizardDirection,
   );
   const next = () => {

@@ -1,69 +1,135 @@
-import axios from "axios";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import M from "materialize-css";
+import { useRouter } from "next/navigation";
+import type { FC } from "react";
 import React, { useState } from "react";
 
-import { actionTypes } from "@/redux/actions";
-import { useThunkDispatch, useTypedSelector } from "@/redux/stateTypes";
-import type { CompanyResponse } from "@/types";
-import { numberWithCommas } from "@/utils/helpers";
-import { useCompanyStore } from "@/zustand/store";
+import type { Database } from "@/types";
+import {
+  manageLand,
+  manageMachine,
+  manageOpeningBalance,
+  manageVehicle,
+  numberWithCommas,
+} from "@/utils";
+import { useCreateCompanyStore } from "@/zustand";
 
 import { Collapsible } from "../common/comps";
 
-const Preview = (): React.ReactNode => {
-  const prevStep = useCompanyStore((state) => state.prevStep);
-  const resetData = useCompanyStore((state) => state.resetCompanyData);
-  const fb = useCompanyStore((state) => state.facebook);
-  const twt = useCompanyStore((state) => state.twitter);
-  const yt = useCompanyStore((state) => state.youtube);
-  const cashBal = useCompanyStore((state) => state.cashBalance);
-  const bankBal = useCompanyStore((state) => state.bankBalance);
-  const email = useCompanyStore((state) => state.email);
-  const location = useCompanyStore((state) => state.location);
-  const tel = useCompanyStore((state) => state.telephone);
-  const name = useCompanyStore((state) => state.name);
-  const desc = useCompanyStore((state) => state.description);
-  const account = useCompanyStore((state) => state.accountNumber);
-  const dispatch = useThunkDispatch();
-  const { token } = useTypedSelector((state) => state.auth);
-  axios.defaults.headers.common["Authorization"] = token;
+interface Props {
+  user: Database["public"]["Tables"]["users"]["Row"];
+}
+
+const Preview: FC<Props> = ({ user }) => {
+  const prevStep = useCreateCompanyStore((state) => state.prevStep);
+  const resetData = useCreateCompanyStore((state) => state.resetProgressData);
+  const fb = useCreateCompanyStore((state) => state.facebook);
+  const twt = useCreateCompanyStore((state) => state.twitter);
+  const yt = useCreateCompanyStore((state) => state.youtube);
+  const cashBal = useCreateCompanyStore((state) => state.cashBalance);
+  const bankBal = useCreateCompanyStore((state) => state.bankBalance);
+  const email = useCreateCompanyStore((state) => state.email);
+  const location = useCreateCompanyStore((state) => state.location);
+  const tel = useCreateCompanyStore((state) => state.telephone);
+  const name = useCreateCompanyStore((state) => state.name);
+  const desc = useCreateCompanyStore((state) => state.description);
+  const account = useCreateCompanyStore((state) => state.accountNumber);
+  const assets = useCreateCompanyStore((state) => state.assets);
+  const landValue = useCreateCompanyStore((state) => state.landValue);
+  const machineValue = useCreateCompanyStore((state) => state.machineValue);
+  const vehicleValue = useCreateCompanyStore((state) => state.vehicleValue);
+  const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const wizardDirection = useCompanyStore((state) => state.wizardDirection);
-  const setWizardDirection = useCompanyStore(
+  const wizardDirection = useCreateCompanyStore(
+    (state) => state.wizardDirection,
+  );
+  const setWizardDirection = useCreateCompanyStore(
     (state) => state.setWizardDirection,
   );
-  const submit = async () => {
+  const router = useRouter();
+  const supabase = createClientComponentClient<Database>();
+  const socialLinks = {
+    facebook: fb ?? null,
+    twitter: twt ?? null,
+    youtube: yt ?? null,
+  };
+  const submit = async (): Promise<void> => {
     setLoading(true);
     try {
-      const res = await axios.post("/company/create", {
-        name,
-        email,
-        location,
-        desc,
-        fb,
-        yt,
-        twt,
-        tel,
-        bank: account,
-        bankBal,
-        cashBal,
-      });
-      const { success, error, data } = res.data as CompanyResponse;
-      setLoading(false);
-      if (success) {
-        M.toast({ html: error, classes: "rounded red" });
+      const employeeIds = [user.user_id];
+      const { data: companyData, error } = await supabase
+        .from("company")
+        .insert([
+          {
+            name,
+            description: desc,
+            account_number: account,
+            phone: tel,
+            email,
+            location,
+            assets: [...assets],
+            employee_ids: [...employeeIds],
+            social_links: { ...socialLinks },
+          },
+        ])
+        .select("id")
+        .single();
+      if (error) {
+        M.toast({ html: error.message, classes: "rounded red" });
       } else {
-        dispatch({
-          type: actionTypes.CREATE_COMPANY,
-          payload: { data },
+        // Insert transaction related to land
+        const { errors: err1 } = await manageLand({
+          assets,
+          companyId: companyData.id,
+          landValue,
         });
-        resetData();
+        err1 && setErrors((prev) => [...prev, ...err1]);
+
+        // Insert transaction related to machine
+        const { errors: err2 } = await manageMachine({
+          assets,
+          companyId: companyData.id,
+          machineValue,
+        });
+        err2 && setErrors((prev) => [...prev, ...err2]);
+
+        // Insert transaction related to machine
+        const { errors: err3 } = await manageVehicle({
+          assets,
+          companyId: companyData.id,
+          vehicleValue,
+        });
+        err3 && setErrors((prev) => [...prev, ...err3]);
+
+        // Insert opening cash and bank balances if available
+        const { errors: err4 } = await manageOpeningBalance({
+          bankBalance: bankBal,
+          cashBalance: cashBal,
+          companyId: companyData.id,
+        });
+        err4 && setErrors((prev) => [...prev, ...err4]);
+
+        setLoading(false);
+
+        // Check if there is any captured error in the process above
+        if (errors.length > 0) {
+          errors.forEach((err) =>
+            M.toast({ html: err, classes: "rounded red" }),
+          );
+          return;
+        }
+
         M.toast({ html: "Success", classes: "rounded green" });
-        // M.toast({ html: 'Account created', classes: 'rounded green' });
+        M.toast({ html: "Company created", classes: "rounded green" });
+        router.refresh();
+        // console.log("success company created");
+        resetData();
       }
     } catch (error) {
       M.toast({ html: "Network error", classes: "rounded red" });
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };

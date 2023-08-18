@@ -4,19 +4,23 @@ import FormGroup from "@mui/material/FormGroup";
 import React from "react";
 
 import type { AssetType } from "@/types";
-import { useCompanyStore } from "@/zustand/store";
+import { useCreateCompanyStore } from "@/zustand";
 
 const SelectAssets = (): React.ReactNode => {
-  const nextStep = useCompanyStore((state) => state.nextStep);
-  const prevStep = useCompanyStore((state) => state.prevStep);
-  const removeAsset = useCompanyStore((state) => state.removeAsset);
-  const addAsset = useCompanyStore((state) => state.addAsset);
-  const assets = useCompanyStore((state) => state.assets);
-  const skipAssetStep = useCompanyStore((state) => state.skipAssetStep);
-  const wizardDirection = useCompanyStore((state) => state.wizardDirection);
-  const setCompletedStep = useCompanyStore((state) => state.setCompletedStep);
-  const currentStep = useCompanyStore((state) => state.step);
-  const setWizardDirection = useCompanyStore(
+  const nextStep = useCreateCompanyStore((state) => state.nextStep);
+  const prevStep = useCreateCompanyStore((state) => state.prevStep);
+  const removeAsset = useCreateCompanyStore((state) => state.removeAsset);
+  const addAsset = useCreateCompanyStore((state) => state.addAsset);
+  const assets = useCreateCompanyStore((state) => state.assets);
+  const skipAssetStep = useCreateCompanyStore((state) => state.skipAssetStep);
+  const wizardDirection = useCreateCompanyStore(
+    (state) => state.wizardDirection,
+  );
+  const setCompletedStep = useCreateCompanyStore(
+    (state) => state.setCompletedStep,
+  );
+  const currentStep = useCreateCompanyStore((state) => state.step);
+  const setWizardDirection = useCreateCompanyStore(
     (state) => state.setWizardDirection,
   );
 

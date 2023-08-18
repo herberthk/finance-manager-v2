@@ -1,21 +1,19 @@
+"use client";
 import axios from "axios";
 import M from "materialize-css";
-import type { FC } from "react";
 import React, { useState } from "react";
 
 import { useTypedSelector } from "@/redux/stateTypes";
 import type { AxiosResponse } from "@/types";
 import { SERVER_URL } from "@/utils/constants";
 import { arrayDiffTotal, numberWithCommas } from "@/utils/helpers";
-import { useCustomDispatch } from "@/utils/hooks";
-
-interface Props {
-  id: string;
-}
+import { useCustomDispatch } from "@/utils/hooks/hooks";
+import { useCompanyStore } from "@/zustand";
 
 type Account = "cash" | "bank" | "";
 
-const BuyAsset: FC<Props> = ({ id }) => {
+const BuyAsset = (): React.ReactNode => {
+  const id = useCompanyStore((state) => state.company?.id);
   const { token } = useTypedSelector((state) => state.auth);
   axios.defaults.headers.common["Authorization"] = token;
   const { cash } = useTypedSelector((state) => state.cash);

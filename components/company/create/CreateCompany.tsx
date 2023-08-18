@@ -1,9 +1,9 @@
 "use client";
-import type { Session } from "@supabase/auth-helpers-nextjs";
+import { type Session } from "@supabase/auth-helpers-nextjs";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import type { FC } from "react";
-import React, { useEffect } from "react";
+import React from "react";
 
 // import Companies from './Companies';
 import Fab from "@/components/common/Fab";
@@ -11,37 +11,18 @@ import Fab from "@/components/common/Fab";
 import MainStep from "@/components/wizard/MainStep";
 import Name from "@/components/wizard/SetName";
 import add from "@/public/assets/add_document.svg";
-import type { Database } from "@/types/database.types";
+import type { Company, User } from "@/types";
 import { routeVariants } from "@/utils/variables";
 
 import Companies from "../list/Companies";
 
-type User = Database["public"]["Tables"]["users"]["Row"];
-
 interface Props {
   user: User | null;
   session: Session;
+  companies: Company[];
 }
-const ListAndCreateCompany: FC<Props> = ({ user, session }) => {
-  // const [userAvailable, setUserAvailable] = useState(false);
-  // const supabase = createClientComponentClient<Database>();
 
-  const available = false;
-  useEffect(() => {
-    // (async () => {
-    //   let { data: user_id, error } = await supabase
-    //     .from("users")
-    //     .select("user_id")
-    //     .single();
-    //   console.log("user_id", user_id);
-    //   console.log("error", error);
-    // })();
-    // return () => {
-    //   cleanup
-    // }
-  }, []);
-  console.log("user", user);
-  // console.log("Session", session);
+const ListAndCreateCompany: FC<Props> = ({ user, session, companies }) => {
   return (
     <>
       <motion.div
@@ -53,12 +34,12 @@ const ListAndCreateCompany: FC<Props> = ({ user, session }) => {
         {/* <div className="row">{available ? <Companies /> : <Create />}</div> */}
         <div className="row">
           <div className="col s12 m5 main_margin">
-            {available ? (
+            {companies.length > 0 ? (
               <>
                 <br />
                 <br />
                 <br />
-                <Companies />
+                <Companies companies={companies || []} />
               </>
             ) : (
               <>

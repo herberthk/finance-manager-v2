@@ -1,17 +1,15 @@
 "use client";
 import Link from "next/link";
-import type { FC } from "react";
 import React from "react";
 
-import { accountsLinks, reportLinks, transactionLinks } from "@/utils/links";
+import { accountsLinks, reportLinks, transactionLinks } from "@/utils/links/links";
+import { useCompanyStore } from "@/zustand";
 
 import { Collapsible } from "./comps";
 // import SetupModal from "./SetupModal";
-interface Props {
-  id: string;
-}
 
-const Side: FC<Props> = ({ id }) => {
+const Side = (): React.ReactNode => {
+  const id = useCompanyStore((state) => state.company?.id);
   return (
     <section className="col s12 m3 side side_margin">
       <ul className="collection with-header">

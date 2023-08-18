@@ -1,28 +1,32 @@
-import { useAccountBalance } from "./hooks";
-// import dayjs from 'dayjs';
-// import { useTypedSelector } from '../../redux/stateTypes';
+import type { GraphData } from "@/types";
 
-export const useData = () => {
+interface ReturnType {
+  pieData: GraphData;
+  donutdDta: GraphData;
+  lineData: GraphData;
+}
+
+export const useData = (): ReturnType => {
   // const { sales } = useTypedSelector((state) => state.sales);
-  const { cashBal, bankBal, totalCapital, salesBal, purchases, stockValue } =
-    useAccountBalance();
+  // const { cashBal, bankBal, totalCapital, salesBal, purchases, stockValue } =
+  //   useAccountBalance();
 
-  const pieData = {
+  const pieData: GraphData = {
     labels: ["Capital", "Cash", "Bank"],
     datasets: [
       {
-        data: [totalCapital, cashBal, bankBal],
+        data: [50000000, 3200000, 17000000],
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
         hoverBackgroundColor: ["magenta", "#36A2EB", "#FFCE56"],
       },
     ],
   };
 
-  const donutdDta = {
+  const donutdDta: GraphData = {
     labels: ["Sales", "Purchase", "Available stock value"],
     datasets: [
       {
-        data: [salesBal, purchases, stockValue],
+        data: [5000000, 120000, 700000],
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
         hoverBackgroundColor: ["teal", "#36A2EB", "#FFCE56"],
       },
@@ -33,7 +37,7 @@ export const useData = () => {
     "January February March April May June July August September October November December";
   const months = monthstr.split(" ");
 
-  const lineData = {
+  const lineData: GraphData = {
     labels: months,
     datasets: [
       {
@@ -56,18 +60,7 @@ export const useData = () => {
         pointRadius: 1,
         pointHitRadius: 10,
         data: [
-          1500000,
-          2000000,
-          3500000,
-          400000,
-          700000,
-          salesBal,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
+          1500000, 2000000, 3500000, 400000, 700000, 600000, 0, 0, 0, 0, 0, 0,
         ],
       },
     ],

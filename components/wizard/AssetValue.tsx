@@ -1,27 +1,35 @@
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
-import { useCompanyStore } from "@/zustand/store";
+import { useCreateCompanyStore } from "@/zustand";
 
 const AssetValue = (): React.ReactNode => {
   useEffect(() => {
     M.updateTextFields();
   }, []);
 
-  const nextStep = useCompanyStore((state) => state.nextStep);
-  const prevStep = useCompanyStore((state) => state.prevStep);
-  const setLandValue = useCompanyStore((state) => state.setLandValue);
-  const setMachineValue = useCompanyStore((state) => state.setMachineValue);
-  const setVehicleValue = useCompanyStore((state) => state.setVehicleValue);
-  const assets = useCompanyStore((state) => state.assets);
-  const landValue = useCompanyStore((state) => state.landValue);
-  const machineValue = useCompanyStore((state) => state.machineValue);
-  const vehicleValue = useCompanyStore((state) => state.vehicleValue);
-  const assetSkipped = useCompanyStore((state) => state.assetSkipped);
-  const wizardDirection = useCompanyStore((state) => state.wizardDirection);
-  const setCompletedStep = useCompanyStore((state) => state.setCompletedStep);
-  const currentStep = useCompanyStore((state) => state.step);
-  const setWizardDirection = useCompanyStore(
+  const nextStep = useCreateCompanyStore((state) => state.nextStep);
+  const prevStep = useCreateCompanyStore((state) => state.prevStep);
+  const setLandValue = useCreateCompanyStore((state) => state.setLandValue);
+  const setMachineValue = useCreateCompanyStore(
+    (state) => state.setMachineValue,
+  );
+  const setVehicleValue = useCreateCompanyStore(
+    (state) => state.setVehicleValue,
+  );
+  const assets = useCreateCompanyStore((state) => state.assets);
+  const landValue = useCreateCompanyStore((state) => state.landValue);
+  const machineValue = useCreateCompanyStore((state) => state.machineValue);
+  const vehicleValue = useCreateCompanyStore((state) => state.vehicleValue);
+  const assetSkipped = useCreateCompanyStore((state) => state.assetSkipped);
+  const wizardDirection = useCreateCompanyStore(
+    (state) => state.wizardDirection,
+  );
+  const setCompletedStep = useCreateCompanyStore(
+    (state) => state.setCompletedStep,
+  );
+  const currentStep = useCreateCompanyStore((state) => state.step);
+  const setWizardDirection = useCreateCompanyStore(
     (state) => state.setWizardDirection,
   );
 

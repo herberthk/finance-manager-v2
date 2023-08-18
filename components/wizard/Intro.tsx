@@ -1,9 +1,9 @@
 import React from "react";
 
-import { useCompanyStore } from "@/zustand/store";
+import { useCreateCompanyStore } from "@/zustand";
 
 const Intro = (): React.ReactNode => {
-  const nextStep = useCompanyStore((state) => state.nextStep);
+  const nextStep = useCreateCompanyStore((state) => state.nextStep);
   return (
     <>
       <h1 className="center">CREAT NEW COMPANY </h1>

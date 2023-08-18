@@ -6,7 +6,7 @@ import React from "react";
 import { cache } from "react";
 
 import ListAndCreateCompany from "@/components/company/create/CreateCompany";
-import type { Database } from "@/types/database.types";
+import type { Database } from "@/types";
 
 // export const dynamic = "force-dynamic"; //clodflare solution
 
@@ -16,8 +16,7 @@ const createServerSupabaseClient = cache(() => {
   return createServerComponentClient<Database>({ cookies: () => cookieStore });
 });
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const Page = async () => {
+const Page = async (): Promise<React.JSX.Element> => {
   const supabase = createServerComponentClient<Database>({ cookies });
   const {
     data: { session },
@@ -28,11 +27,18 @@ const Page = async () => {
   }
 
   const { data: user } = await supabase.from("users").select("*").single();
+  const { data: companies } = await supabase.from("company").select("*");
   // console.log("Session", session);
   // error?.message ==='JSON object requested, multiple (or no) rows returned' means nothing was returned
   // console.log("user", user);
-  // console.log("error", error);
-  return <ListAndCreateCompany user={user} session={session} />;
+  // console.log("companies", companies);
+  return (
+    <ListAndCreateCompany
+      companies={companies || []}
+      user={user}
+      session={session}
+    />
+  );
 };
 
 export default Page;

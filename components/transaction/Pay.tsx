@@ -7,7 +7,7 @@ import { useTypedSelector } from "@/redux/stateTypes";
 import type { AxiosResponse, CompanyProps } from "@/types";
 import { SERVER_URL } from "@/utils/constants";
 import { arrayDiffTotal, numberWithCommas } from "@/utils/helpers";
-import { useCustomDispatch } from "@/utils/hooks";
+import { useCustomDispatch } from "@/utils/hooks/hooks";
 
 type Account = "cash" | "bank" | "";
 

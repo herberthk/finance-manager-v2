@@ -1,26 +1,30 @@
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
-import { useCompanyStore } from "@/zustand/store";
+import { useCreateCompanyStore } from "@/zustand";
 
 const BasicInfo = (): React.ReactNode => {
   useEffect(() => {
     M.updateTextFields();
   }, []);
-  const nextStep = useCompanyStore((state) => state.nextStep);
-  const prevStep = useCompanyStore((state) => state.prevStep);
-  const name = useCompanyStore((state) => state.name);
-  const desc = useCompanyStore((state) => state.description);
-  const account = useCompanyStore((state) => state.accountNumber);
-  const setAccount = useCompanyStore((state) => state.setAccount);
-  const setDesc = useCompanyStore((state) => state.setDescription);
-  const setName = useCompanyStore((state) => state.setName);
-  const wizardDirection = useCompanyStore((state) => state.wizardDirection);
-  const setWizardDirection = useCompanyStore(
+  const nextStep = useCreateCompanyStore((state) => state.nextStep);
+  const prevStep = useCreateCompanyStore((state) => state.prevStep);
+  const name = useCreateCompanyStore((state) => state.name);
+  const desc = useCreateCompanyStore((state) => state.description);
+  const account = useCreateCompanyStore((state) => state.accountNumber);
+  const setAccount = useCreateCompanyStore((state) => state.setAccount);
+  const setDesc = useCreateCompanyStore((state) => state.setDescription);
+  const setName = useCreateCompanyStore((state) => state.setName);
+  const wizardDirection = useCreateCompanyStore(
+    (state) => state.wizardDirection,
+  );
+  const setWizardDirection = useCreateCompanyStore(
     (state) => state.setWizardDirection,
   );
-  const setCompletedStep = useCompanyStore((state) => state.setCompletedStep);
-  const currentStep = useCompanyStore((state) => state.step);
+  const setCompletedStep = useCreateCompanyStore(
+    (state) => state.setCompletedStep,
+  );
+  const currentStep = useCreateCompanyStore((state) => state.step);
   const next = () => {
     if (!name || !desc) {
       M.toast({

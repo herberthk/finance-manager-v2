@@ -2,6 +2,8 @@ import dayjs from "dayjs";
 import type { FC } from "react";
 import React from "react";
 import styled from "styled-components";
+
+import { useCompanyStore } from "@/zustand";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -22,18 +24,16 @@ const Container = styled.div`
   }
 `;
 interface Props {
-  name: string;
-  account: string;
-  email: string;
-  location: string;
+  account?: string;
 }
 
-const AccountTop: FC<Props> = ({ name, account, email, location }) => {
+const AccountTop: FC<Props> = ({ account }) => {
+  const company = useCompanyStore((state) => state.company);
   return (
     <Container>
-      <h5>{name}</h5>
+      <h5>{company?.name}</h5>
       <p>
-        {location}, {email}
+        {company?.location}, {company?.email}
       </p>
       <h6>{account}</h6>
       <p>As of {dayjs().format("DD/MM/YYYY")}</p>

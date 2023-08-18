@@ -3,7 +3,7 @@ import { Chart, registerables } from "chart.js";
 import React from "react";
 import { Doughnut, Line, Pie } from "react-chartjs-2";
 
-import { useData } from "@/utils/data";
+import { useData } from "@/utils";
 Chart.register(...registerables);
 
 const Dashboard = (): React.ReactNode => {

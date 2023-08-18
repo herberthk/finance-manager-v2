@@ -1,14 +1,14 @@
-import type { AssetType, Direction } from ".";
+import type { AssetType, Company, Direction } from ".";
 
 export interface CreateCompanyState {
   step: number;
-  bankBalance?: string;
-  cashBalance?: string;
-  landValue?: string;
-  machineValue?: string;
-  vehicleValue?: string;
-  name?: string;
-  description?: string;
+  bankBalance: number;
+  cashBalance: number;
+  landValue: number;
+  machineValue: number;
+  vehicleValue: number;
+  name: string;
+  description: string;
   accountNumber?: string;
   telephone?: string;
   email?: string;
@@ -25,7 +25,7 @@ export interface CreateCompanyState {
   skipAssetStep: (state: boolean) => void;
   addAsset: (asset: AssetType) => void;
   removeAsset: (asset: AssetType) => void;
-  resetCompanyData: () => void;
+  resetProgressData: () => void;
   nextStep: () => void;
   prevStep: () => void;
   setBankBalance: (amount: string) => void;
@@ -42,4 +42,10 @@ export interface CreateCompanyState {
   setFacebook: (fb: string) => void;
   setTwitter: (t: string) => void;
   setYoutube: (yt: string) => void;
+}
+
+export interface CompanyState {
+  company: Company | null;
+  setCompany: (company: Company) => void;
+  resetCompany: () => void;
 }

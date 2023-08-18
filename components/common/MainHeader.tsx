@@ -1,7 +1,9 @@
+"use client";
 import { motion } from "framer-motion";
-import type { FC } from "react";
 import React from "react";
 import styled from "styled-components";
+
+import { useCompanyStore } from "@/zustand";
 // import logo from '../../asset/logo.png';
 const Container = styled(motion.div)`
   width: 100%;
@@ -43,16 +45,14 @@ const Logo = styled.div`
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
   text-transform: uppercase;
 `;
-interface Props {
-  name: string;
-}
 
-const MainHeader: FC<Props> = ({ name }) => {
+const MainHeader = (): React.ReactNode => {
+  const companyName = useCompanyStore((state) => state.company?.name);
   return (
     <>
       <Container>
-        <Logo>{name.substring(0, 2)}</Logo>
-        <H1 className="textShadow">{name}</H1>
+        <Logo>{companyName?.substring(0, 2)}</Logo>
+        <H1 className="textShadow">{companyName}</H1>
       </Container>
       <br /> <br />
       <br />

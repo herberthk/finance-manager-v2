@@ -3,7 +3,7 @@ import type { FC } from "react";
 import React, { useLayoutEffect } from "react";
 
 import type { Database } from "@/types/database.types";
-import { useCompanyStore } from "@/zustand/store";
+import { useCreateCompanyStore } from "@/zustand";
 
 import { RightComp } from "../common/comps";
 import AssetValue from "./AssetValue";
@@ -26,9 +26,9 @@ const MainStep: FC<Props> = ({ user }) => {
   }, []);
 
   // const [logo, setLogo] = useState('');
-  console.log(user);
+  // console.log(user);
 
-  const step = useCompanyStore((state) => state.step);
+  const step = useCreateCompanyStore((state) => state.step);
 
   const steps: Record<number, React.ReactNode> = {
     0: <Intro />,
@@ -38,7 +38,7 @@ const MainStep: FC<Props> = ({ user }) => {
     4: <SelectAssets />,
     5: <AssetValue />,
     6: <SocialLinks />,
-    7: <Preview />,
+    7: <Preview user={user} />,
   };
 
   return (

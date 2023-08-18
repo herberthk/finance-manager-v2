@@ -1,60 +1,35 @@
-import dayjs from "dayjs";
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { DataArray } from "@/redux/interface";
-import { useTypedSelector } from "@/redux/stateTypes";
-import type { CompanyProps } from "@/types";
+import AccountTop from "@/components/common/AccoutTop";
+import { TableHead } from "@/components/common/comps";
+import PrintButton from "@/components/common/Print";
+import type { Bank } from "@/types";
 import { numberWithCommas } from "@/utils/helpers";
 
-import AccountTop from "../common/AccoutTop";
-import { TableHead } from "../common/comps";
-import PrintButton from "../common/Print";
+import Credit from "../common/Credit";
+import Debit from "../common/Debit";
 
-const Debit: FC<DataArray> = ({ amount, details, pd }) => {
-  return (
-    <tr>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
-      <td>{details === "Bank" ? "Balance b/d" : details}</td>
-      {/* <td>{code}</td> */}
-      <td className="center">{numberWithCommas(amount)}</td>
-      <td className="center"></td>
-      <td className="center"></td>
-      <td className="center"></td>
-    </tr>
-  );
+type Props = {
+  bank: Bank[];
 };
 
-const Credit: FC<DataArray> = ({ amount, details, pd }) => {
-  return (
-    <tr>
-      <td className="center"></td>
-      <td className="center"></td>
-      <td className="center"></td>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
-      <td>{details}</td>
-      <td className="center">{numberWithCommas(amount)}</td>
-      {/* <td>{code}</td> */}
-    </tr>
-  );
-};
+const BankAccount: FC<Props> = ({ bank }) => {
+  const totalDebit = bank
+    .filter((b) => b.type === "dr")
 
-const Bank: FC<CompanyProps> = ({ email, location, name }) => {
-  const { bank } = useTypedSelector((state) => state.bank);
-
-  let totalDebit = 0;
-  let totalCredit = 0;
+    .map((b) => b.amount)
+    .reduce((a, b) => a + b, 0);
+  const totalCredit = bank
+    .filter((b) => b.type === "cr")
+    .map((b) => b.amount)
+    .reduce((a, b) => a + b, 0);
   const componentRef = useRef(null);
   return (
     <>
       {/* <Ovary showOvary={showOvary} /> */}
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="Bank Acount"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="Bank Acount" />
         <TableHead>
           <div>Dr</div>
           <div>Cr</div>
@@ -71,31 +46,25 @@ const Bank: FC<CompanyProps> = ({ email, location, name }) => {
             </tr>
           </thead>
           <tbody>
-            {bank.map((t) => {
-              if (t.type === "dr") {
-                totalDebit += t.amount;
-              } else {
-                totalCredit += t.amount;
-              }
-
-              return t.type === "dr" ? (
+            {bank.map((t) =>
+              t.type === "dr" ? (
                 <Debit
-                  key={t._id}
+                  key={t.id}
                   amount={t.amount}
                   details={t.details}
-                  pd={t.pd}
+                  createdat={t.createdat}
                   code={t.code}
                 />
               ) : (
                 <Credit
-                  key={t._id}
+                  key={t.id}
                   amount={t.amount}
                   details={t.details}
-                  pd={t.pd}
+                  createdat={t.createdat}
                   code={t.code}
                 />
-              );
-            })}
+              ),
+            )}
             <tr>
               <td></td>
               <td> </td>
@@ -134,4 +103,4 @@ const Bank: FC<CompanyProps> = ({ email, location, name }) => {
   );
 };
 
-export default Bank;
+export default BankAccount;

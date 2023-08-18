@@ -12,33 +12,33 @@ export interface Database {
     Tables: {
       bank: {
         Row: {
-          amount: number | null;
-          code: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          amount?: number | null;
-          code?: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          amount?: number | null;
-          code?: string | null;
+          amount?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
@@ -55,33 +55,33 @@ export interface Database {
       };
       capital: {
         Row: {
-          amount: number | null;
-          code: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          amount?: number | null;
-          code?: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          amount?: number | null;
-          code?: string | null;
+          amount?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
@@ -98,33 +98,33 @@ export interface Database {
       };
       cash: {
         Row: {
-          amount: number | null;
-          code: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          amount?: number | null;
-          code?: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          amount?: number | null;
-          code?: string | null;
+          amount?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
@@ -141,36 +141,36 @@ export interface Database {
       };
       cashbook: {
         Row: {
-          bank: number | null;
-          cash: number | null;
-          code: string | null;
+          bank: number;
+          cash: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          bank?: number | null;
-          cash?: number | null;
-          code?: string | null;
+          bank: number;
+          cash: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          bank?: number | null;
-          cash?: number | null;
-          code?: string | null;
+          bank?: number;
+          cash?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
@@ -188,48 +188,51 @@ export interface Database {
       company: {
         Row: {
           account_number: string | null;
-          assets: string[] | null;
-          createdat: string | null;
-          description: string | null;
+          assets: string[];
+          createdat: string;
+          description: string;
           email: string | null;
-          employee_ids: string[] | null;
+          employee_ids: string[];
           id: string;
           location: string | null;
           log: string | null;
-          name: string | null;
+          name: string;
           phone: string | null;
+          social_links: Json;
           status: Database["public"]["Enums"]["account_status"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
           account_number?: string | null;
-          assets?: string[] | null;
-          createdat?: string | null;
-          description?: string | null;
+          assets?: string[];
+          createdat?: string;
+          description: string;
           email?: string | null;
-          employee_ids?: string[] | null;
+          employee_ids?: string[];
           id?: string;
           location?: string | null;
           log?: string | null;
-          name?: string | null;
+          name: string;
           phone?: string | null;
+          social_links: Json;
           status?: Database["public"]["Enums"]["account_status"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
           account_number?: string | null;
-          assets?: string[] | null;
-          createdat?: string | null;
-          description?: string | null;
+          assets?: string[];
+          createdat?: string;
+          description?: string;
           email?: string | null;
-          employee_ids?: string[] | null;
+          employee_ids?: string[];
           id?: string;
           location?: string | null;
           log?: string | null;
-          name?: string | null;
+          name?: string;
           phone?: string | null;
+          social_links?: Json;
           status?: Database["public"]["Enums"]["account_status"];
           updatedat?: string | null;
           updatedby?: string | null;
@@ -238,33 +241,33 @@ export interface Database {
       };
       expense: {
         Row: {
-          amount: number | null;
-          code: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          amount?: number | null;
-          code?: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          amount?: number | null;
-          code?: string | null;
+          amount?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
@@ -281,33 +284,33 @@ export interface Database {
       };
       journal: {
         Row: {
-          amount: number | null;
-          code: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          amount?: number | null;
-          code?: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          amount?: number | null;
-          code?: string | null;
+          amount?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
@@ -324,37 +327,37 @@ export interface Database {
       };
       land: {
         Row: {
-          amount: number | null;
-          code: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
-          sold: boolean | null;
+          sold: boolean;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          amount?: number | null;
-          code?: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
-          sold?: boolean | null;
+          sold?: boolean;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          amount?: number | null;
-          code?: string | null;
+          amount?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
-          sold?: boolean | null;
+          sold?: boolean;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
@@ -370,37 +373,37 @@ export interface Database {
       };
       machine: {
         Row: {
-          amount: number | null;
-          code: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
-          sold: boolean | null;
+          sold: boolean;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          amount?: number | null;
-          code?: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
-          sold?: boolean | null;
+          sold?: boolean;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          amount?: number | null;
-          code?: string | null;
+          amount?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
-          sold?: boolean | null;
+          sold?: boolean;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
@@ -416,33 +419,33 @@ export interface Database {
       };
       sales: {
         Row: {
-          amount: number | null;
-          code: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          amount?: number | null;
-          code?: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          amount?: number | null;
-          code?: string | null;
+          amount?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
@@ -457,77 +460,43 @@ export interface Database {
           },
         ];
       };
-      social: {
-        Row: {
-          company_id: string;
-          createdat: string | null;
-          id: string;
-          name: string | null;
-          updatedat: string | null;
-          updatedby: string | null;
-        };
-        Insert: {
-          company_id: string;
-          createdat?: string | null;
-          id?: string;
-          name?: string | null;
-          updatedat?: string | null;
-          updatedby?: string | null;
-        };
-        Update: {
-          company_id?: string;
-          createdat?: string | null;
-          id?: string;
-          name?: string | null;
-          updatedat?: string | null;
-          updatedby?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "social_company_id_fkey";
-            columns: ["company_id"];
-            referencedRelation: "company";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
       stock: {
         Row: {
-          code: string | null;
+          code: string;
           company_id: string;
-          createdat: string | null;
+          createdat: string;
           id: string;
-          item: string | null;
-          price: number | null;
-          quantity: number | null;
-          quantity_sold: number | null;
-          selling_price: number | null;
+          item: string;
+          price: number;
+          quantity: number;
+          quantity_sold: number;
+          selling_price: number;
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          code?: string | null;
+          code: string;
           company_id: string;
-          createdat?: string | null;
+          createdat?: string;
           id?: string;
-          item?: string | null;
-          price?: number | null;
-          quantity?: number | null;
-          quantity_sold?: number | null;
-          selling_price?: number | null;
+          item: string;
+          price: number;
+          quantity: number;
+          quantity_sold: number;
+          selling_price: number;
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          code?: string | null;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
+          createdat?: string;
           id?: string;
-          item?: string | null;
-          price?: number | null;
-          quantity?: number | null;
-          quantity_sold?: number | null;
-          selling_price?: number | null;
+          item?: string;
+          price?: number;
+          quantity?: number;
+          quantity_sold?: number;
+          selling_price?: number;
           updatedat?: string | null;
           updatedby?: string | null;
         };
@@ -585,37 +554,37 @@ export interface Database {
       };
       vehicle: {
         Row: {
-          amount: number | null;
-          code: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat: string | null;
-          details: string | null;
+          createdat: string;
+          details: string;
           id: string;
-          sold: boolean | null;
+          sold: boolean;
           type: Database["public"]["Enums"]["transaction_type"];
           updatedat: string | null;
           updatedby: string | null;
         };
         Insert: {
-          amount?: number | null;
-          code?: string | null;
+          amount: number;
+          code: string;
           company_id: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details: string;
           id?: string;
-          sold?: boolean | null;
+          sold?: boolean;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;
         };
         Update: {
-          amount?: number | null;
-          code?: string | null;
+          amount?: number;
+          code?: string;
           company_id?: string;
-          createdat?: string | null;
-          details?: string | null;
+          createdat?: string;
+          details?: string;
           id?: string;
-          sold?: boolean | null;
+          sold?: boolean;
           type?: Database["public"]["Enums"]["transaction_type"];
           updatedat?: string | null;
           updatedby?: string | null;

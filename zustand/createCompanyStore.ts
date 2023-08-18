@@ -3,14 +3,14 @@ import { devtools, persist } from "zustand/middleware";
 
 import type { AssetType, CreateCompanyState, Direction } from "@/types";
 
-export const useCompanyStore = create<CreateCompanyState>()(
+export const useCreateCompanyStore = create<CreateCompanyState>()(
   devtools(
     persist(
       (set) => ({
         // initial state
         step: 0,
-        bankBalance: "",
-        cashBalance: "",
+        bankBalance: 0,
+        cashBalance: 0,
         name: "",
         description: "",
         accountNumber: "",
@@ -20,9 +20,9 @@ export const useCompanyStore = create<CreateCompanyState>()(
         facebook: "",
         twitter: "",
         youtube: "",
-        landValue: "",
-        vehicleValue: "",
-        machineValue: "",
+        landValue: 0,
+        vehicleValue: 0,
+        machineValue: 0,
         assets: [],
         assetSkipped: false,
         wizardDirection: "next",
@@ -30,8 +30,9 @@ export const useCompanyStore = create<CreateCompanyState>()(
         // methods for manipulating state
         addAsset: (asset: AssetType) => {
           set((state) => ({
-            assets: state.assets.concat(asset),
-            // assets: new Set([...state.assets, asset]),
+            assets: [...state.assets, asset].filter(
+              (e, i, a) => a.indexOf(e) == i,
+            ),
           }));
         },
         setCompletedStep: (step: number) => {
@@ -47,15 +48,15 @@ export const useCompanyStore = create<CreateCompanyState>()(
           const assetValue = `${asset}Value`;
           set((state) => ({
             assets: [...state.assets.filter((x) => x !== asset)],
-            [assetValue]: "",
+            [assetValue]: 0,
             // assets: new Set([...state.assets].filter((x) => x !== asset)),
           }));
         },
-        resetCompanyData: () => {
+        resetProgressData: () => {
           set(() => ({
             step: 0,
-            bankBalance: "",
-            cashBalance: "",
+            bankBalance: 0,
+            cashBalance: 0,
             name: "",
             description: "",
             accountNumber: "",
@@ -67,9 +68,9 @@ export const useCompanyStore = create<CreateCompanyState>()(
             youtube: "",
             assets: [],
             assetSkipped: false,
-            landValue: "",
-            vehicleValue: "",
-            machineValue: "",
+            landValue: 0,
+            vehicleValue: 0,
+            machineValue: 0,
             wizardDirection: "next",
             completedSteps: {},
           }));
@@ -81,7 +82,8 @@ export const useCompanyStore = create<CreateCompanyState>()(
         },
         prevStep: () => {
           set((state) => {
-            const currentStep = state.step - 1;
+            const currentStep = state.step - 2;
+
             const completed = state.completedSteps;
             const updatedSteps = Object.keys(completed).reduce<{
               [k: number]: boolean;
@@ -94,6 +96,7 @@ export const useCompanyStore = create<CreateCompanyState>()(
               }
               return acc;
             }, {});
+
             return {
               step: state.step - 1,
               completedSteps: updatedSteps,
@@ -112,27 +115,27 @@ export const useCompanyStore = create<CreateCompanyState>()(
         },
         setLandValue: (amount: string) => {
           set(() => ({
-            landValue: amount,
+            landValue: +amount,
           }));
         },
         setMachineValue: (amount: string) => {
           set(() => ({
-            machineValue: amount,
+            machineValue: +amount,
           }));
         },
         setVehicleValue: (amount: string) => {
           set(() => ({
-            vehicleValue: amount,
+            vehicleValue: +amount,
           }));
         },
         setBankBalance: (amount: string) => {
           set(() => ({
-            bankBalance: amount,
+            bankBalance: +amount,
           }));
         },
         setCashBalance: (amount: string) => {
           set(() => ({
-            cashBalance: amount,
+            cashBalance: +amount,
           }));
         },
         setName: (name: string) => {

@@ -1,13 +1,11 @@
+"use client";
 import M from "materialize-css";
-import type { FC } from "react";
 import React, { useEffect } from "react";
-
-import type { CompanyProps } from "@/types";
 
 import BuyAsset from "./Buy";
 import SellAsset from "./Sell";
 
-const Asset: FC<CompanyProps> = ({ _id }) => {
+const Asset = (): React.ReactNode => {
   useEffect(() => {
     M.AutoInit();
   }, []);
@@ -29,10 +27,10 @@ const Asset: FC<CompanyProps> = ({ _id }) => {
       </ul>
       <div className="row">
         <div id="buyAsset" className="col s12">
-          <BuyAsset id={_id} />
+          <BuyAsset />
         </div>
         <div id="sellAsset" className="col s12">
-          <SellAsset id={_id} />
+          <SellAsset />
         </div>
       </div>
     </>

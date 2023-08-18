@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { FC } from "react";
 import React, { useEffect, useState } from "react";
 
-import type { Database } from "@/types/database.types";
+import type { Database } from "@/types";
 
 interface Props {
   session: Session;

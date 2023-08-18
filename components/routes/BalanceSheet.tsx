@@ -1,15 +1,16 @@
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { DataArray } from "@/redux/interface";
-import type { CompanyProps } from "@/types";
+import AccountTop from "@/components/common/AccoutTop";
+import PrintButton from "@/components/common/Print";
+import { numberWithCommas, useAccountBalance } from "@/utils";
 
-import { numberWithCommas } from "../../utils/helpers";
-import { useAccountBalance } from "../../utils/hooks";
-import AccountTop from "../common/AccoutTop";
-import PrintButton from "../common/Print";
+type Bal = {
+  amount: number;
+  details: string;
+};
 
-const Bal: FC<DataArray> = ({ amount, details }) => {
+const Balance: FC<Bal> = ({ amount, details }) => {
   return (
     <tr>
       <td>{details}</td>
@@ -23,7 +24,7 @@ const Bal: FC<DataArray> = ({ amount, details }) => {
   );
 };
 
-const BalanceSheet: FC<CompanyProps> = ({ email, location, name }) => {
+const BalanceSheet = (): React.ReactNode => {
   const {
     landBal,
     bankBal,
@@ -43,12 +44,7 @@ const BalanceSheet: FC<CompanyProps> = ({ email, location, name }) => {
   return (
     <>
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="Balance sheet"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="Balance sheet" />
 
         <table className="black-text striped">
           <thead>
@@ -68,9 +64,13 @@ const BalanceSheet: FC<CompanyProps> = ({ email, location, name }) => {
                 <td></td>
               </tr>
             )}
-            {landBal > 0 && <Bal amount={landBal} details="Land" />}
-            {machineBal > 0 && <Bal amount={machineBal} details="Machine" />}
-            {vehicleBal > 0 && <Bal amount={vehicleBal} details="Vehicle" />}
+            {landBal > 0 && <Balance amount={landBal} details="Land" />}
+            {machineBal > 0 && (
+              <Balance amount={machineBal} details="Machine" />
+            )}
+            {vehicleBal > 0 && (
+              <Balance amount={vehicleBal} details="Vehicle" />
+            )}
 
             <tr>
               <td>
@@ -79,9 +79,9 @@ const BalanceSheet: FC<CompanyProps> = ({ email, location, name }) => {
               <td></td>
               <td></td>
             </tr>
-            {cashBal > 0 && <Bal amount={cashBal} details="Cash" />}
-            {bankBal > 0 && <Bal amount={bankBal} details="Bank" />}
-            {stockValue > 0 && <Bal amount={stockValue} details="Stock" />}
+            {cashBal > 0 && <Balance amount={cashBal} details="Cash" />}
+            {bankBal > 0 && <Balance amount={bankBal} details="Bank" />}
+            {stockValue > 0 && <Balance amount={stockValue} details="Stock" />}
             <tr>
               <td>
                 <b>TOTAL ASSETS</b>
@@ -98,9 +98,9 @@ const BalanceSheet: FC<CompanyProps> = ({ email, location, name }) => {
               <td></td>
               <td></td>
             </tr>
-            <Bal amount={totalCapital} details="Capital" />
-            {profit > 0 && <Bal amount={profit} details="Profit" />}
-            {profit < 0 && <Bal amount={profit} details="Loss" />}
+            <Balance amount={totalCapital} details="Capital" />
+            {profit > 0 && <Balance amount={profit} details="Profit" />}
+            {profit < 0 && <Balance amount={profit} details="Loss" />}
 
             <tr>
               <td>

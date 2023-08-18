@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import { useTypedSelector } from "@/redux/stateTypes";
 import type { CompanyProps } from "@/types";
 import { numberWithCommas } from "@/utils/helpers";
-import { useAccountBalance } from "@/utils/hooks";
+import { useAccountBalance } from "@/utils/hooks/hooks";
 
 import AccountTop from "../common/AccoutTop";
 import PrintButton from "../common/Print";

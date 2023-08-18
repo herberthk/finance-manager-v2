@@ -1,47 +1,26 @@
-import dayjs from "dayjs";
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { DataArray } from "@/redux/interface";
-import { useTypedSelector } from "@/redux/stateTypes";
-import type { CompanyProps } from "@/types";
+import type { Capital } from "@/types";
 import { numberWithCommas } from "@/utils/helpers";
 
 import AccountTop from "../common/AccoutTop";
 import { TableHead } from "../common/comps";
+import Credit from "../common/Credit";
 import PrintButton from "../common/Print";
 
-// import { axiosResponse } from '../../welcome/interface';
-
-const Credit: FC<DataArray> = ({ amount, details, pd }) => {
-  return (
-    <tr>
-      <td className="center"></td>
-      <td className="center"></td>
-      <td className="center"></td>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
-      <td>{details}</td>
-      <td className="center">{numberWithCommas(amount)}</td>
-      {/* <td>{code}</td> */}
-    </tr>
-  );
+type Props = {
+  capital: Capital[];
 };
 
-const Capital: FC<CompanyProps> = ({ email, location, name }) => {
-  const { capital } = useTypedSelector((state) => state.capital);
-
+const CapitalAccount: FC<Props> = ({ capital }) => {
   let totalCredit = 0;
   const componentRef = useRef(null);
   return (
     <>
       {/* <Ovary showOvary={showOvary} /> */}
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="Capital Account"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="Capital Account" />
         <TableHead>
           <div>Dr</div>
           <div>Cr</div>
@@ -59,14 +38,14 @@ const Capital: FC<CompanyProps> = ({ email, location, name }) => {
           </thead>
           <tbody>
             {capital.map((t) => {
-              totalCredit += t.amount;
+              totalCredit += t?.amount!;
               return (
                 <Credit
-                  key={t._id}
-                  amount={t.amount}
-                  details={t.details}
-                  pd={t.pd}
-                  code={t.code}
+                  key={t.id}
+                  amount={t?.amount!}
+                  details={t?.details!}
+                  createdat={t.createdat!}
+                  code={t?.code!}
                 />
               );
             })}
@@ -106,4 +85,4 @@ const Capital: FC<CompanyProps> = ({ email, location, name }) => {
   );
 };
 
-export default Capital;
+export default CapitalAccount;

@@ -6,7 +6,7 @@ import type { DataArray } from "@/redux/interface";
 import { useTypedSelector } from "@/redux/stateTypes";
 import type { CompanyProps } from "@/types";
 
-import { numberWithCommas } from "../../utils/helpers";
+import { numberWithCommas } from "../../utils/helpers/calculations";
 import AccountTop from "../common/AccoutTop";
 import { TableHead } from "../common/comps";
 import PrintButton from "../common/Print";

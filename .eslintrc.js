@@ -133,7 +133,6 @@ module.exports = {
         leadingUnderscore: "allow",
       },
     ],
-
     // "import/extensions": "off",
     // "import/no-relative-parent-imports": "error",
     "filename-rules/match": [

@@ -4,7 +4,7 @@ import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
 import * as React from "react";
 
-import { useCompanyStore } from "@/zustand/store";
+import { useCreateCompanyStore } from "@/zustand";
 
 const steps = [
   "Basic information",
@@ -17,8 +17,8 @@ const steps = [
 ];
 
 const HorizontalStepper = (): React.ReactNode => {
-  const activeStep = useCompanyStore((state) => state.step);
-  const completedSteps = useCompanyStore((state) => state.completedSteps);
+  const activeStep = useCreateCompanyStore((state) => state.step);
+  const completedSteps = useCreateCompanyStore((state) => state.completedSteps);
 
   return (
     <Box sx={{ width: "100%" }}>
