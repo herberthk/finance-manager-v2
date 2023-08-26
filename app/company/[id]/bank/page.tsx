@@ -2,10 +2,10 @@
 import React from "react";
 
 import BankAccount from "@/components/routes/Bank";
-import type { Bank } from "@/types";
+import type { BankType } from "@/types";
 
 const Page = (): React.ReactNode => {
-  const data: Bank[] = [];
+  const data: BankType[] = [];
   return <BankAccount bank={data} />;
 };
 

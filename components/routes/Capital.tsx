@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { Capital } from "@/types";
-import { numberWithCommas } from "@/utils/helpers";
+import type { CapitalType } from "@/types";
+import { getTotalCredit, numberWithCommas } from "@/utils";
 
 import AccountTop from "../common/AccoutTop";
 import { TableHead } from "../common/comps";
@@ -10,11 +10,11 @@ import Credit from "../common/Credit";
 import PrintButton from "../common/Print";
 
 type Props = {
-  capital: Capital[];
+  capital: CapitalType[];
 };
 
 const CapitalAccount: FC<Props> = ({ capital }) => {
-  let totalCredit = 0;
+  const totalCredit = getTotalCredit(capital);
   const componentRef = useRef(null);
   return (
     <>
@@ -37,18 +37,15 @@ const CapitalAccount: FC<Props> = ({ capital }) => {
             </tr>
           </thead>
           <tbody>
-            {capital.map((t) => {
-              totalCredit += t?.amount!;
-              return (
-                <Credit
-                  key={t.id}
-                  amount={t?.amount!}
-                  details={t?.details!}
-                  createdat={t.createdat!}
-                  code={t?.code!}
-                />
-              );
-            })}
+            {capital.map((t) => (
+              <Credit
+                key={t.id}
+                amount={t.amount}
+                details={t.details}
+                createdat={t.createdat}
+                code={t.code}
+              />
+            ))}
             <tr>
               <td></td>
               <td> </td>

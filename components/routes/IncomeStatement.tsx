@@ -1,10 +1,9 @@
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import { useTypedSelector } from "@/redux/stateTypes";
-import type { CompanyProps } from "@/types";
+import type { ExpenseType } from "@/types";
+import { useAccountBalance } from "@/utils";
 import { numberWithCommas } from "@/utils/helpers";
-import { useAccountBalance } from "@/utils/hooks/hooks";
 
 import AccountTop from "../common/AccoutTop";
 import PrintButton from "../common/Print";
@@ -15,7 +14,7 @@ interface Props {
   cr?: number;
 }
 
-const Bal: FC<Props> = ({ cr, dr, details }) => {
+const Balance: FC<Props> = ({ cr, dr, details }) => {
   return (
     <tr>
       <td>{details}</td>
@@ -25,20 +24,15 @@ const Bal: FC<Props> = ({ cr, dr, details }) => {
   );
 };
 
-const IncomeStatement: FC<CompanyProps> = ({ email, location, name }) => {
+const IncomeStatement = (): React.ReactNode => {
   const componentRef = useRef(null);
   const { salesBal, netPurchase, profit, grossProfit } = useAccountBalance();
-  const { expenses } = useTypedSelector((state) => state.expenses);
+  const expenses: ExpenseType[] = [];
   console.log("Gross profit", grossProfit);
   return (
     <>
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="Profit & loss account"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="Profit & loss account" />
         <table className="black-text striped">
           <thead>
             <tr>
@@ -48,9 +42,9 @@ const IncomeStatement: FC<CompanyProps> = ({ email, location, name }) => {
             </tr>
           </thead>
           <tbody>
-            <Bal details="Sales" cr={salesBal} />
-            <Bal details="Net purchases" dr={netPurchase} />
-            <Bal details="GROSS PROFIT" cr={grossProfit} />
+            <Balance details="Sales" cr={salesBal} />
+            <Balance details="Net purchases" dr={netPurchase} />
+            <Balance details="GROSS PROFIT" cr={grossProfit} />
 
             <tr>
               <td></td>
@@ -65,7 +59,7 @@ const IncomeStatement: FC<CompanyProps> = ({ email, location, name }) => {
                   <td></td>
                 </tr>
                 {expenses.map((e) => (
-                  <Bal key={e.id} details={e.details} dr={e.amount} />
+                  <Balance key={e.id} details={e.details} dr={e.amount} />
                 ))}
               </>
             )}

@@ -1,54 +1,35 @@
 "use client";
-import axios from "axios";
+
 import M from "materialize-css";
+import type { FC } from "react";
 import React, { useState } from "react";
 
-import { useTypedSelector } from "@/redux/stateTypes";
-import type { AxiosResponse } from "@/types";
-import { SERVER_URL } from "@/utils/constants";
-import { arrayDiffTotal, numberWithCommas } from "@/utils/helpers";
-import { useCustomDispatch } from "@/utils/hooks/hooks";
+import { numberWithCommas } from "@/utils";
 import { useCompanyStore } from "@/zustand";
 
 type Account = "cash" | "bank" | "";
+type Name = "land" | "machine" | "vehicle" | "";
 
-const BuyAsset = (): React.ReactNode => {
+type Props = {
+  cashBalance: number;
+  bankBalance: number;
+};
+
+const BuyAsset: FC<Props> = ({ bankBalance, cashBalance }) => {
   const id = useCompanyStore((state) => state.company?.id);
-  const { token } = useTypedSelector((state) => state.auth);
-  axios.defaults.headers.common["Authorization"] = token;
-  const { cash } = useTypedSelector((state) => state.cash);
-  const { bank } = useTypedSelector((state) => state.bank);
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState<number>();
-  const [account, setAccount] = useState<Account>("");
-  const [loading, setLoading] = useState(false);
-  const cashBal = arrayDiffTotal(cash);
-  const bankBal = arrayDiffTotal(bank);
-  const {
-    getBank,
-    getCapital,
-    getCash,
-    getJournal,
-    goTo,
-    getLand,
-    getMachine,
-    getVehicle,
-    getCashBook,
-    getExpenses,
-    getSales,
-    getStock,
-  } = useCustomDispatch();
 
-  const change = (e: {
-    target: { value: string | ((prevState: Account) => Account) };
-  }) => {
-    const val = e.target.value as Account;
-    setAccount(val);
-  };
+  const [name, setName] = useState<Name>("");
+  const [amount, setAmount] = useState<number>();
+  const [account, setAccount] = useState<Account>("cash");
+  const [loading, setLoading] = useState(false);
+
+  const change = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setAccount(e.target.value as Account);
+
   const send = async () => {
     if (!amount || !name) {
       M.toast({
-        html: "Asset name and amout are required",
+        html: "Asset name and amount are required",
         classes: "rounded red",
       });
       return;
@@ -66,26 +47,26 @@ const BuyAsset = (): React.ReactNode => {
     //   return;
     // }
     if (account === "cash") {
-      if (amount > cashBal) {
+      if (amount > cashBalance) {
         M.toast({
           html: "Insuficient cash balance",
           classes: "rounded red",
         });
         M.toast({
-          html: `Your cash balance is $ ${numberWithCommas(cashBal)}`,
+          html: `Your cash balance is $ ${numberWithCommas(cashBalance)}`,
           classes: "rounded red",
         });
         return;
       }
     }
     if (account === "bank") {
-      if (amount > bankBal) {
+      if (amount > bankBalance) {
         M.toast({
           html: "Insuficient bank balance",
           classes: "rounded red",
         });
         M.toast({
-          html: `Your bank balance is $ ${numberWithCommas(bankBal)}`,
+          html: `Your bank balance is $ ${numberWithCommas(bankBalance)}`,
           classes: "rounded red",
         });
         return;
@@ -109,19 +90,6 @@ const BuyAsset = (): React.ReactNode => {
         M.toast({ html: "Success", classes: "rounded green" });
         setAmount(undefined);
         setName("");
-        await getBank(res.data.data.bank);
-        await getCapital(res.data.data.capital);
-        await getCash(res.data.data.cash);
-        await getJournal(res.data.data.journal);
-        await getLand(res.data.data.land);
-        await getMachine(res.data.data.machine);
-        await getVehicle(res.data.data.vehicle);
-        await getStock(res.data.data.stock);
-        await getCashBook(res.data.data.cashbook);
-        await getSales(res.data.data.sales);
-        await getExpenses(res.data.data.expenses);
-
-        await goTo("ledger");
         // }
       }
     } catch (error) {
@@ -133,7 +101,7 @@ const BuyAsset = (): React.ReactNode => {
     <div className="card-panel">
       <div className="row">
         <div className="input-field col s12">
-          <select onChange={(e) => setName(e.target.value)}>
+          <select onChange={(e) => setName(e.target.value as Name)}>
             <option className="black-text" selected disabled defaultValue="">
               Select asset to buy
             </option>
@@ -176,12 +144,12 @@ const BuyAsset = (): React.ReactNode => {
           <ul className="collection">
             {account === "cash" && (
               <li className="collection-item black-text">
-                Cash balance: $ <b>{numberWithCommas(cashBal)}</b>
+                Cash balance: $ <b>{numberWithCommas(cashBalance)}</b>
               </li>
             )}
             {account === "bank" && (
               <li className="collection-item black-text">
-                Bank balance: $ <b>{numberWithCommas(bankBal)}</b>
+                Bank balance: $ <b>{numberWithCommas(bankBalance)}</b>
               </li>
             )}
           </ul>
@@ -192,11 +160,7 @@ const BuyAsset = (): React.ReactNode => {
           <input
             id="amount"
             defaultValue={amount}
-            onChange={(e) => {
-              const input = (e.target as HTMLInputElement).value as unknown;
-              let val = input as number;
-              setAmount(val);
-            }}
+            onChange={(e) => setAmount(+e.target.value)}
             type="number"
             className="validate black-text"
           />

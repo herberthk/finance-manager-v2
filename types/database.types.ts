@@ -141,8 +141,8 @@ export interface Database {
       };
       cashbook: {
         Row: {
-          bank: number;
-          cash: number;
+          bank: number | null;
+          cash: number | null;
           code: string;
           company_id: string;
           createdat: string;
@@ -153,8 +153,8 @@ export interface Database {
           updatedby: string | null;
         };
         Insert: {
-          bank: number;
-          cash: number;
+          bank?: number | null;
+          cash?: number | null;
           code: string;
           company_id: string;
           createdat?: string;
@@ -165,8 +165,8 @@ export interface Database {
           updatedby?: string | null;
         };
         Update: {
-          bank?: number;
-          cash?: number;
+          bank?: number | null;
+          cash?: number | null;
           code?: string;
           company_id?: string;
           createdat?: string;

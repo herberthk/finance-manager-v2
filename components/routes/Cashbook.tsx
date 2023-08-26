@@ -2,19 +2,25 @@ import dayjs from "dayjs";
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { CashBookDataArray } from "@/redux/interface";
-import { useTypedSelector } from "@/redux/stateTypes";
-import type { CompanyProps } from "@/types";
+import type { CashbooKType } from "@/types";
 import { numberWithCommas } from "@/utils/helpers";
 
 import AccountTop from "../common/AccoutTop";
 import { TableHead } from "../common/comps";
 import PrintButton from "../common/Print";
 
-const Debit: FC<CashBookDataArray> = ({ cash, bank, details, pd }) => {
+// TODO
+// Make Credit and debit to be reusable like other accounts
+
+const Debit: FC<Partial<CashbooKType>> = ({
+  cash,
+  bank,
+  details,
+  createdat,
+}) => {
   return (
     <tr>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
+      <td>{dayjs(createdat).format("DD/MM/YYYY")}</td>
       <td>{details}</td>
       <td className="center">{!cash ? "-" : numberWithCommas(cash)}</td>
       <td className="center">{!bank ? "-" : numberWithCommas(bank)}</td>
@@ -26,14 +32,19 @@ const Debit: FC<CashBookDataArray> = ({ cash, bank, details, pd }) => {
   );
 };
 
-const Credit: FC<CashBookDataArray> = ({ cash, bank, details, pd }) => {
+const Credit: FC<Partial<CashbooKType>> = ({
+  cash,
+  bank,
+  details,
+  createdat,
+}) => {
   return (
     <tr>
       <td></td>
       <td></td>
       <td></td>
       <td></td>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
+      <td>{dayjs(createdat).format("DD/MM/YYYY")}</td>
       <td>{details}</td>
       <td className="center">{!cash ? "-" : numberWithCommas(cash)}</td>
       <td className="center">{!bank ? "-" : numberWithCommas(bank)}</td>
@@ -41,27 +52,36 @@ const Credit: FC<CashBookDataArray> = ({ cash, bank, details, pd }) => {
   );
 };
 
-const Cashbook: FC<CompanyProps> = ({ email, location, name }) => {
-  const { cashbook } = useTypedSelector((state) => state.cashbook);
-  let totalDrcash = 0;
-  let totalDrbank = 0;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let totalCrcash = 0;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let totalCrbank = 0;
-  let balCash = 0;
-  let balBank = 0;
-  let totalBankBal = 0;
+type Props = {
+  cashbook: CashbooKType[];
+};
+
+const Cashbook: FC<Props> = ({ cashbook }) => {
+  const totalDrcash = cashbook
+    .filter((c) => c.type === "dr")
+    .map((c) => c.cash)
+    .reduce((a, b) => a + b, 0);
+  const totalDrbank = cashbook
+    .filter((c) => c.type === "dr")
+    .map((c) => c.bank)
+    .reduce((a, b) => a + b, 0);
+
+  const totalCrcash = cashbook
+    .filter((c) => c.type === "cr")
+    .map((c) => c.cash)
+    .reduce((a, b) => a + b, 0);
+  let totalCrbank = cashbook
+    .filter((c) => c.type === "cr")
+    .map((c) => c.bank)
+    .reduce((a, b) => a + b, 0);
+  const balCash = totalDrcash - totalCrcash;
+  const balBank = totalDrbank - totalCrbank;
+  const totalBankBal = balBank < 0 ? totalCrbank : balBank;
   const componentRef = useRef(null);
   return (
     <>
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="Cash book"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="Cash book" />
         <TableHead>
           <div>Dr</div>
           <div>Cr</div>
@@ -80,38 +100,27 @@ const Cashbook: FC<CompanyProps> = ({ email, location, name }) => {
             </tr>
           </thead>
           <tbody>
-            {cashbook.map((t) => {
-              if (t.type === "dr") {
-                totalDrcash += t.cash;
-                totalDrbank += t.bank;
-              } else {
-                totalCrcash += t.cash;
-                totalCrbank += t.bank;
-              }
-
-              return t.type === "dr" ? (
+            {cashbook.map((t) =>
+              t.type === "dr" ? (
                 <Debit
-                  key={t._id}
+                  key={t.id}
                   cash={t.cash}
                   bank={t.bank}
                   details={t.details}
-                  pd={t.pd}
+                  createdat={t.createdat}
                   code={t.code}
                 />
               ) : (
                 <Credit
-                  key={t._id}
+                  key={t.id}
                   cash={t.cash}
                   bank={t.bank}
                   details={t.details}
-                  pd={t.pd}
+                  createdat={t.createdat}
                   code={t.code}
                 />
-              );
-            })}
-            {/* {(balCash = totalDrcash - totalCrcash)}
-            {(balBank = totalDrbank - totalCrbank)}
-            {(totalBankBal = balBank < 0 ? totalCrbank : balBank)} */}
+              ),
+            )}
             <tr>
               <td></td>
               <td></td>

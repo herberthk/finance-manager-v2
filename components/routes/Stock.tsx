@@ -2,41 +2,46 @@ import dayjs from "dayjs";
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { StockArray } from "@/redux/interface";
-import { useTypedSelector } from "@/redux/stateTypes";
-import type { CompanyProps } from "@/types";
+import type { StockType } from "@/types";
+import { numberWithCommas } from "@/utils";
 
-import { numberWithCommas } from "../../utils/helpers/calculations";
 import AccountTop from "../common/AccoutTop";
 import PrintButton from "../common/Print";
 
-const Item: FC<StockArray> = ({ item, price, pd, qty, sPrice, sqty }) => {
+const Item: FC<Partial<StockType>> = ({
+  item,
+  price,
+  createdat,
+  quantity,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  selling_price,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  quantity_sold,
+}) => {
   return (
     <tr>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
+      <td>{dayjs(createdat).format("DD/MM/YYYY")}</td>
       <td>{item}</td>
-      <td className="center">{numberWithCommas(qty)}</td>
-      <td className="center">{numberWithCommas(price)}</td>
-      <td className="center">{numberWithCommas(sPrice)}</td>
-      <td className="center">{numberWithCommas(sqty)}</td>
+      <td className="center">{numberWithCommas(quantity ?? 0)}</td>
+      <td className="center">{numberWithCommas(price ?? 0)}</td>
+      <td className="center">{numberWithCommas(selling_price ?? 0)}</td>
+      <td className="center">{numberWithCommas(quantity_sold ?? 0)}</td>
     </tr>
   );
 };
 
-const Stock: FC<CompanyProps> = ({ email, location, name }) => {
-  const { stock } = useTypedSelector((state) => state.stock);
-  let totalQty = 0;
-  let sold = 0;
+type Props = {
+  stock: StockType[];
+};
+
+const Stock: FC<Props> = ({ stock }) => {
+  const totalQty = stock.map((c) => c.quantity).reduce((a, b) => a + b, 0);
+  const sold = stock.map((c) => c.quantity_sold).reduce((a, b) => a + b, 0);
   const componentRef = useRef(null);
   return (
     <>
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="Stock Account"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="Stock Account" />
 
         <table className="black-text striped">
           <thead>
@@ -50,23 +55,17 @@ const Stock: FC<CompanyProps> = ({ email, location, name }) => {
             </tr>
           </thead>
           <tbody>
-            {stock.map((t) => {
-              totalQty += t.qty;
-              sold += t.sqty;
-              // total += t.price * t.qty;
-
-              return (
-                <Item
-                  key={t._id}
-                  item={t.item}
-                  price={t.price}
-                  pd={t.pd}
-                  qty={t.qty}
-                  sPrice={t.sPrice}
-                  sqty={t.sqty}
-                />
-              );
-            })}
+            {stock.map((t) => (
+              <Item
+                key={t.id}
+                item={t.item}
+                price={t.price}
+                createdat={t.createdat}
+                quantity={t.quantity}
+                selling_price={t.selling_price}
+                quantity_sold={t.quantity_sold}
+              />
+            ))}
             <tr>
               <td></td>
               <td></td>

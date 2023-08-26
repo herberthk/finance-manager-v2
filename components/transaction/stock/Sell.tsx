@@ -1,6 +1,5 @@
 import axios from "axios";
 import M from "materialize-css";
-import type { FC } from "react";
 import React, { useState } from "react";
 
 import { useTypedSelector } from "@/redux/stateTypes";
@@ -9,13 +8,9 @@ import { SERVER_URL } from "@/utils/constants";
 import { arrayDiffTotal, numberWithCommas } from "@/utils/helpers";
 import { useCustomDispatch } from "@/utils/hooks/hooks";
 
-interface Props {
-  id: string;
-}
-
 type Account = "cash" | "bank" | "";
 
-const SellStock: FC<Props> = ({ id }) => {
+const SellStock = (): React.ReactNode => {
   const { token } = useTypedSelector((state) => state.auth);
   axios.defaults.headers.common["Authorization"] = token;
   const { cash } = useTypedSelector((state) => state.cash);

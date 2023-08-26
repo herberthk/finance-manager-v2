@@ -11,15 +11,15 @@ import Fab from "@/components/common/Fab";
 import MainStep from "@/components/wizard/MainStep";
 import Name from "@/components/wizard/SetName";
 import add from "@/public/assets/add_document.svg";
-import type { Company, User } from "@/types";
-import { routeVariants } from "@/utils/variables";
+import type { CompanyType, UserType } from "@/types";
+import { routeVariants } from "@/utils";
 
 import Companies from "../list/Companies";
 
 interface Props {
-  user: User | null;
+  user: UserType | null;
   session: Session;
-  companies: Company[];
+  companies: CompanyType[];
 }
 
 const ListAndCreateCompany: FC<Props> = ({ user, session, companies }) => {

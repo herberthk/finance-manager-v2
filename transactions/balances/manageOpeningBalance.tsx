@@ -1,7 +1,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import type { Database } from "@/types";
-import { generateCode } from "@/utils/helpers";
+import { generateCode } from "@/utils";
 
 interface Params {
   companyId: string;
@@ -18,9 +18,9 @@ export const manageOpeningBalance = async ({
 }> => {
   const errors: string[] = [];
   const supabase = createClientComponentClient<Database>();
-
+  let code;
   if (cashBalance) {
-    const code = generateCode();
+    code = generateCode();
 
     const { error: err1 } = await supabase.from("cash").insert([
       {
@@ -31,6 +31,7 @@ export const manageOpeningBalance = async ({
       },
     ]);
     err1 && errors.push(err1.message);
+    code = generateCode();
     const { error: err2 } = await supabase.from("capital").insert([
       {
         company_id: companyId,
@@ -40,6 +41,8 @@ export const manageOpeningBalance = async ({
       },
     ]);
     err2 && errors.push(err2.message);
+    code = generateCode();
+    const code2 = generateCode();
     const { error: err3 } = await supabase.from("journal").insert([
       {
         company_id: companyId,
@@ -50,7 +53,7 @@ export const manageOpeningBalance = async ({
       },
       {
         company_id: companyId,
-        code,
+        code: code2,
         amount: cashBalance,
         details: "Capital",
         type: "cr",
@@ -58,8 +61,9 @@ export const manageOpeningBalance = async ({
     ]);
     err3 && errors.push(err3.message);
   }
+
   if (bankBalance) {
-    const code = generateCode();
+    code = generateCode();
 
     const { error: err1 } = await supabase.from("bank").insert([
       {
@@ -70,6 +74,7 @@ export const manageOpeningBalance = async ({
       },
     ]);
     err1 && errors.push(err1.message);
+    code = generateCode();
     const { error: err2 } = await supabase.from("capital").insert([
       {
         company_id: companyId,
@@ -79,6 +84,8 @@ export const manageOpeningBalance = async ({
       },
     ]);
     err2 && errors.push(err2.message);
+    code = generateCode();
+    const code2 = generateCode();
     const { error: err3 } = await supabase.from("journal").insert([
       {
         company_id: companyId,
@@ -89,7 +96,7 @@ export const manageOpeningBalance = async ({
       },
       {
         company_id: companyId,
-        code,
+        code: code2,
         amount: bankBalance,
         details: "Capital",
         type: "cr",

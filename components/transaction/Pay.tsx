@@ -1,81 +1,62 @@
-import axios from "axios";
 import M from "materialize-css";
 import type { FC } from "react";
 import React, { useEffect, useState } from "react";
 
-import { useTypedSelector } from "@/redux/stateTypes";
-import type { AxiosResponse, CompanyProps } from "@/types";
-import { SERVER_URL } from "@/utils/constants";
-import { arrayDiffTotal, numberWithCommas } from "@/utils/helpers";
-import { useCustomDispatch } from "@/utils/hooks/hooks";
+import { paymentBank, paymentCash } from "@/transactions";
+import { numberWithCommas } from "@/utils";
+import { useCompanyStore } from "@/zustand";
 
 type Account = "cash" | "bank" | "";
 
-const Pay: FC<CompanyProps> = ({ _id: id }) => {
+type Props = {
+  cashBalance: number;
+  bankBalance: number;
+};
+
+const Pay: FC<Props> = ({ bankBalance, cashBalance }) => {
   useEffect(() => {
     M.AutoInit();
   }, []);
-  const { token } = useTypedSelector((state) => state.auth);
-  axios.defaults.headers.common["Authorization"] = token;
-  const { cash } = useTypedSelector((state) => state.cash);
-  const { bank } = useTypedSelector((state) => state.bank);
+  const id = useCompanyStore((state) => state.company?.id);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState<number>();
   const [account, setAccount] = useState<Account>("");
   const [loading, setLoading] = useState(false);
-  const cashBal = arrayDiffTotal(cash);
-  const bankBal = arrayDiffTotal(bank);
-  const {
-    getBank,
-    getCapital,
-    getCash,
-    getJournal,
-    goTo,
-    getLand,
-    getMachine,
-    getVehicle,
-    getCashBook,
-    getExpenses,
-    getSales,
-    getStock,
-  } = useCustomDispatch();
+  const [errors, setErrors] = useState<string[]>([]);
 
-  const change = (e: {
-    target: { value: string | ((prevState: Account) => Account) };
-  }) => {
-    const val = e.target.value as Account;
-    setAccount(val);
-  };
+  const change = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setAccount(e.target.value as Account);
+
   const send = async () => {
     if (!amount || !name) {
       M.toast({
-        html: "Asset name and amout are required",
+        html: "Name and amount are required",
         classes: "rounded red",
       });
       return;
     }
 
     if (account === "cash") {
-      if (amount > cashBal) {
+      if (amount > cashBalance) {
         M.toast({
           html: "Insuficient cash balance",
           classes: "rounded red",
         });
         M.toast({
-          html: `Your cash balance is $ ${numberWithCommas(cashBal)}`,
+          html: `Your cash balance is $ ${numberWithCommas(cashBalance)}`,
           classes: "rounded red",
         });
         return;
       }
     }
     if (account === "bank") {
-      if (amount > bankBal) {
+      if (amount > bankBalance) {
         M.toast({
           html: "Insuficient bank balance",
           classes: "rounded red",
         });
         M.toast({
-          html: `Your bank balance is $ ${numberWithCommas(bankBal)}`,
+          html: `Your bank balance is $ ${numberWithCommas(bankBalance)}`,
           classes: "rounded red",
         });
         return;
@@ -83,38 +64,43 @@ const Pay: FC<CompanyProps> = ({ _id: id }) => {
     }
     setLoading(true);
     try {
-      // return;
-      const res = await axios.post(`${SERVER_URL}/transaction/payexpense`, {
-        amount,
-        name,
-        account,
-        id,
-      });
-      const { success, error } = res.data as AxiosResponse;
-      setLoading(false);
-      if (!success) {
-        M.toast({ html: error, classes: "rounded red" });
-        // setInvalid(true);
-      } else {
-        M.toast({ html: "Success", classes: "rounded green" });
-        setAmount(undefined);
-        setName("");
-        await getBank(res.data.data.bank);
-        await getCapital(res.data.data.capital);
-        await getCash(res.data.data.cash);
-        await getJournal(res.data.data.journal);
-        await getLand(res.data.data.land);
-        await getMachine(res.data.data.machine);
-        await getVehicle(res.data.data.vehicle);
-        await getStock(res.data.data.stock);
-        await getCashBook(res.data.data.cashbook);
-        await getSales(res.data.data.sales);
-        await getExpenses(res.data.data.expenses);
-        await goTo("expenses");
+      if (account === "cash") {
+        // Pay with cash
+        const { errors } = await paymentCash({
+          amount,
+          // The company in store was initialized with null
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          companyId: id!,
+          name,
+        });
+        errors && setErrors((prev) => [...prev, ...errors]);
       }
+      if (account === "bank") {
+        // Pay with bank account
+        const { errors } = await paymentBank({
+          amount,
+          // The company in store was initialized with null
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          companyId: id!,
+          name,
+        });
+        errors && setErrors((prev) => [...prev, ...errors]);
+      }
+      setLoading(false);
+      if (errors.length > 0) {
+        errors.forEach((error) =>
+          M.toast({ html: error, classes: "rounded red" }),
+        );
+        return;
+      }
+      M.toast({ html: "Success", classes: "rounded green" });
+      setAmount(undefined);
+      setName("");
     } catch (error) {
       setLoading(false);
       M.toast({ html: "Error try again", classes: "rounded red" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -160,12 +146,12 @@ const Pay: FC<CompanyProps> = ({ _id: id }) => {
           <ul className="collection">
             {account === "cash" && (
               <li className="collection-item black-text">
-                Cash balance: $ <b>{numberWithCommas(cashBal)}</b>
+                Cash balance: $ <b>{numberWithCommas(cashBalance)}</b>
               </li>
             )}
             {account === "bank" && (
               <li className="collection-item black-text">
-                Bank balance: $ <b>{numberWithCommas(bankBal)}</b>
+                Bank balance: $ <b>{numberWithCommas(bankBalance)}</b>
               </li>
             )}
           </ul>

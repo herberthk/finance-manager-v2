@@ -1,15 +1,15 @@
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { LedgerDataArray } from "@/redux/interface";
-import type { CompanyProps } from "@/types";
+import type { LedgerData } from "@/types";
+import { useAccountBalance } from "@/utils";
 import { numberWithCommas } from "@/utils/helpers";
-import { useAccountBalance } from "@/utils/hooks/hooks";
 
 import AccountTop from "../common/AccoutTop";
 import PrintButton from "../common/Print";
-
-const Debit: FC<LedgerDataArray> = ({ cr, diff, dr, details }) => {
+//TODo
+// Make Debit and Credit reusable like others
+const Debit: FC<Partial<LedgerData>> = ({ cr, diff, dr, details }) => {
   return (
     <tr>
       <td>{details}</td>
@@ -21,7 +21,7 @@ const Debit: FC<LedgerDataArray> = ({ cr, diff, dr, details }) => {
   );
 };
 
-const Credit: FC<LedgerDataArray> = ({ cr, details }) => {
+const Credit: FC<Partial<LedgerData>> = ({ cr, details }) => {
   return (
     <tr>
       <td>{details}</td>
@@ -33,7 +33,7 @@ const Credit: FC<LedgerDataArray> = ({ cr, details }) => {
   );
 };
 
-const Ledger: FC<CompanyProps> = ({ email, location, name }) => {
+const Ledger = (): React.ReactNode => {
   const {
     landBal,
     bankBal,
@@ -62,12 +62,7 @@ const Ledger: FC<CompanyProps> = ({ email, location, name }) => {
   return (
     <>
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="General Ledger"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="General Ledger" />
         <table className="black-text border_table">
           <thead>
             <tr>

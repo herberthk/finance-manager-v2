@@ -1,13 +1,10 @@
 import M from "materialize-css";
-import type { FC } from "react";
 import React, { useEffect } from "react";
-
-import type { CompanyProps } from "@/types";
 
 import Purchase from "./PurchaseStock";
 import SellStock from "./Sell";
 
-const ManageStock: FC<CompanyProps> = ({ _id }) => {
+const ManageStock = (): React.ReactNode => {
   useEffect(() => {
     M.AutoInit();
   }, []);
@@ -29,10 +26,10 @@ const ManageStock: FC<CompanyProps> = ({ _id }) => {
       </ul>
       <div className="row">
         <div id="buyStock" className="col s12">
-          <Purchase id={_id} />
+          <Purchase />
         </div>
         <div id="sellStock" className="col s12">
-          <SellStock id={_id} />
+          <SellStock />
         </div>
       </div>
     </>

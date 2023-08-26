@@ -1,54 +1,24 @@
-import dayjs from "dayjs";
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { DataArray } from "@/redux/interface";
-import { useTypedSelector } from "@/redux/stateTypes";
-import type { CompanyProps } from "@/types";
-import { numberWithCommas } from "@/utils/helpers";
+import type { JournalType } from "@/types";
 
 import AccountTop from "../common/AccoutTop";
+import Credit from "../common/Credit";
+import Debit from "../common/Debit";
 import PrintButton from "../common/Print";
-
-const Debit: FC<DataArray> = ({ amount, details, code, pd }) => {
-  return (
-    <tr>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
-      <td>{details}</td>
-      <td>{code}</td>
-      <td className="center">{numberWithCommas(amount)}</td>
-      <td className="center"></td>
-    </tr>
-  );
+type Props = {
+  journal: JournalType[];
 };
-
-const Credit: FC<DataArray> = ({ amount, details, pd, code }) => {
-  return (
-    <tr>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
-      <td>{details}</td>
-      <td>{code}</td>
-      <td className="center"></td>
-      <td className="center">{numberWithCommas(amount)}</td>
-    </tr>
-  );
-};
-
-const Journal: FC<CompanyProps> = ({ email, location, name }) => {
-  const { transactions } = useTypedSelector((state) => state.journal);
-  let totalCredit = 0;
-  let totalDebit = 0;
+const Journal: FC<Props> = ({ journal }) => {
+  // let totalCredit = 0;
+  // let totalDebit = 0;
   const componentRef = useRef(null);
   return (
     <>
       {/* <Ovary showOvary={showOvary} /> */}
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="General Journal"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="General Journal" />
         <table className="black-text striped">
           <thead>
             <tr>
@@ -60,28 +30,25 @@ const Journal: FC<CompanyProps> = ({ email, location, name }) => {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((t) => {
-              t.type === "dr"
-                ? (totalDebit += t.amount)
-                : (totalCredit += t.amount);
-              return t.type === "dr" ? (
+            {journal.map((t) =>
+              t.type === "dr" ? (
                 <Debit
-                  key={t._id}
+                  key={t.id}
                   amount={t.amount}
                   details={t.details}
-                  pd={t.pd}
+                  createdat={t.createdat}
                   code={t.code}
                 />
               ) : (
                 <Credit
-                  key={t._id}
+                  key={t.id}
                   amount={t.amount}
                   details={t.details}
-                  pd={t.pd}
+                  createdat={t.createdat}
                   code={t.code}
                 />
-              );
-            })}
+              ),
+            )}
 
             {/* <tr>
               <td>

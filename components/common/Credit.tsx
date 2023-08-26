@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
 import type { FC } from "react";
 
-import type { DebitCredit } from "@/types";
+import type { TransactionType } from "@/types";
 import { numberWithCommas } from "@/utils";
 
-const Credit: FC<DebitCredit> = ({ amount, details, createdat }) => {
+const Credit: FC<TransactionType> = ({ amount, details, createdat }) => {
   return (
     <tr>
       <td className="center"></td>

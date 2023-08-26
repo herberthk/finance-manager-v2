@@ -27,10 +27,10 @@ const Asset = (): React.ReactNode => {
       </ul>
       <div className="row">
         <div id="buyAsset" className="col s12">
-          <BuyAsset />
+          <BuyAsset bankBalance={0} cashBalance={0} />
         </div>
         <div id="sellAsset" className="col s12">
-          <SellAsset />
+          <SellAsset landBalance={0} machineBalance={0} vehicleBalance={0} />
         </div>
       </div>
     </>

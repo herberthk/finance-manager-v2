@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-import type { Company, CompanyState } from "@/types";
+import type { CompanyState, CompanyType } from "@/types";
 
 export const useCompanyStore = create<CompanyState>()(
   devtools(
@@ -15,14 +15,14 @@ export const useCompanyStore = create<CompanyState>()(
             company: null,
           }));
         },
-        setCompany: (company: Company) => {
+        setCompany: (company: CompanyType) => {
           set(() => ({
             company: company,
           }));
         },
       }),
       {
-        name: "company-registration",
+        name: "company-information",
         // storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
       },
     ),

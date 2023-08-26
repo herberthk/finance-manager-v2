@@ -1,33 +1,31 @@
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { DataArray } from "@/redux/interface";
-import type { CompanyProps } from "@/types";
-import { numberWithCommas } from "@/utils/helpers";
-import { useAccountBalance } from "@/utils/hooks/hooks";
+import type { Account } from "@/types";
+import { numberWithCommas, useAccountBalance } from "@/utils";
 
 import AccountTop from "../common/AccoutTop";
 import PrintButton from "../common/Print";
-const Debit: FC<DataArray> = ({ amount, details }) => {
+const Debit: FC<Partial<Account>> = ({ amount, details }) => {
   return (
     <tr>
       <td>{details}</td>
-      <td className="center">{numberWithCommas(amount)}</td>
+      <td className="center">{numberWithCommas(amount ?? 0)}</td>
       <td className="center"></td>
     </tr>
   );
 };
-const Credit: FC<DataArray> = ({ amount, details }) => {
+const Credit: FC<Partial<Account>> = ({ amount, details }) => {
   return (
     <tr>
       <td>{details}</td>
       <td></td>
-      <td className="center">{numberWithCommas(amount)}</td>
+      <td className="center">{numberWithCommas(amount ?? 0)}</td>
     </tr>
   );
 };
 
-const TrialBalance: FC<CompanyProps> = ({ email, location, name }) => {
+const TrialBalance = (): React.ReactNode => {
   const {
     landBal,
     bankBal,
@@ -46,12 +44,7 @@ const TrialBalance: FC<CompanyProps> = ({ email, location, name }) => {
   return (
     <>
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="Trial Balance"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="Trial Balance" />
         <table className="black-text striped">
           <thead>
             <tr>
@@ -61,9 +54,17 @@ const TrialBalance: FC<CompanyProps> = ({ email, location, name }) => {
             </tr>
           </thead>
           <tbody>
-            <Credit amount={totalCapital} details="Capital" pd={new Date()} />
+            <Credit
+              amount={totalCapital}
+              details="Capital"
+              createdat={new Date().toISOString()}
+            />
             {salesBal > 0 && (
-              <Credit amount={salesBal} details="Sales" pd={new Date()} />
+              <Credit
+                amount={salesBal}
+                details="Sales"
+                createdat={new Date().toISOString()}
+              />
             )}
             {landBal > 0 && <Debit amount={landBal} details="Land" />}
             {vehicleBal > 0 && <Debit amount={vehicleBal} details="Vehicle" />}

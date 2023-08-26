@@ -1,45 +1,29 @@
-import type { DataArray } from "@/redux/interface";
+import type { Account } from "@/types";
 
-export const numberWithCommas = (x: number): string => {
-  return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
+export const getTotal = (ar: number[]): number =>
+  ar.reduce((a: number, b: number) => a + b, 0);
 
-export const getTotal = (ar: number[]): number => {
-  return ar.reduce((a: number, b: number) => a + b, 0);
-};
+export const debitMinusCreditTotal = (account: Account[]): number =>
+  account
+    .filter((b) => b.type === "dr")
+    .map((b) => b.amount)
+    .reduce((a, b) => a + b, 0) -
+  account
+    .filter((b) => b.type === "cr")
+    .map((b) => b.amount)
+    .reduce((a, b) => a + b, 0);
 
-export const removeSeparators = (n: string): string => {
-  return n.replace(/([.,])(\d\d\d\D|\d\d\d$)/g, "$2");
-};
+export const getTotalDebit = (account: Account[]): number =>
+  account
+    .filter((b) => b.type === "dr")
+    .map((b) => b.amount)
+    .reduce((a, b) => a + b, 0);
 
-export const arrayDiffTotal = (num: DataArray[]): number => {
-  let ttdr = 0;
-  let ttcr = 0;
-  let total = 0;
-  num.forEach((c) => {
-    c.type === "dr" ? (ttdr += c.amount) : (ttcr += c.amount);
-  });
-  total = ttdr - ttcr;
-  return total;
-};
-
-export const getTotalDebit = (num: DataArray[]): number => {
-  let total = 0;
-  num.forEach((c) => {
-    c.type === "dr" && (total += c.amount);
-  });
-
-  return total;
-};
-
-export const getTotalCredit = (num: DataArray[]): number => {
-  let total = 0;
-  num.forEach((c) => {
-    c.type === "cr" && (total += c.amount);
-  });
-
-  return total;
-};
+export const getTotalCredit = (account: Account[]): number =>
+  account
+    .filter((b) => b.type === "cr")
+    .map((b) => b.amount)
+    .reduce((a, b) => a + b, 0);
 
 // export const useFreshAccountData = (data: Data): void => {
 //   const {
@@ -62,26 +46,12 @@ export const getTotalCredit = (num: DataArray[]): number => {
 //     await getVehicle(data.vehicle);
 //   })();
 // };
-export const arrayCrDiffTotal = (num: DataArray[]): number => {
-  let ttdr = 0;
-  let ttcr = 0;
-  let total = 0;
-  num.forEach((c) => {
-    c.type === "dr" ? (ttdr += c.amount) : (ttcr += c.amount);
-  });
-  total = ttcr - ttdr;
-  return total;
-};
-
-export const upperFirst = (str: string): string =>
-  str.charAt(0).toUpperCase() + str.slice(1);
-
-export const generateCode = (len: number = 8): string => {
-  let result = "";
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let charactersLength = characters.length;
-  for (let i = 0; i < len; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
+export const creditMinusDebitTotal = (account: Account[]): number =>
+  account
+    .filter((b) => b.type === "cr")
+    .map((b) => b.amount)
+    .reduce((a, b) => a + b, 0) -
+  account
+    .filter((b) => b.type === "dr")
+    .map((b) => b.amount)
+    .reduce((a, b) => a + b, 0);

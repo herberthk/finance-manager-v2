@@ -1,4 +1,4 @@
-import type { AssetType, Company, Direction } from ".";
+import type { AssetType, CompanyType, Direction } from ".";
 
 export interface CreateCompanyState {
   step: number;
@@ -45,7 +45,7 @@ export interface CreateCompanyState {
 }
 
 export interface CompanyState {
-  company: Company | null;
-  setCompany: (company: Company) => void;
+  company: CompanyType | null;
+  setCompany: (company: CompanyType) => void;
   resetCompany: () => void;
 }

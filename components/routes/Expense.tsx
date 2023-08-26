@@ -1,60 +1,28 @@
-import dayjs from "dayjs";
 import type { FC } from "react";
 import React, { useRef } from "react";
 
-import type { DataArray } from "@/redux/interface";
-import { useTypedSelector } from "@/redux/stateTypes";
-import type { CompanyProps } from "@/types";
-import { numberWithCommas } from "@/utils/helpers";
+import type { ExpenseType } from "@/types";
+import { getTotalCredit, getTotalDebit, numberWithCommas } from "@/utils";
 
 import AccountTop from "../common/AccoutTop";
 import { TableHead } from "../common/comps";
+import Credit from "../common/Credit";
+import Debit from "../common/Debit";
 import PrintButton from "../common/Print";
 
-const Debit: FC<DataArray> = ({ amount, details, pd }) => {
-  return (
-    <tr>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
-      <td>{details === "Cash" ? "Balance b/d" : details}</td>
-      {/* <td>{code}</td> */}
-      <td className="center">{numberWithCommas(amount)}</td>
-      <td className="center"></td>
-      <td className="center"></td>
-      <td className="center"></td>
-    </tr>
-  );
+type Props = {
+  expenses: ExpenseType[];
 };
 
-const Credit: FC<DataArray> = ({ amount, details, pd }) => {
-  return (
-    <tr>
-      <td className="center"></td>
-      <td className="center"></td>
-      <td className="center"></td>
-      <td>{dayjs(pd).format("DD/MM/YYYY")}</td>
-      <td>{details}</td>
-      <td className="center">{numberWithCommas(amount)}</td>
-      {/* <td>{code}</td> */}
-    </tr>
-  );
-};
-
-const Expense: FC<CompanyProps> = ({ email, location, name }) => {
-  const { expenses } = useTypedSelector((state) => state.expenses);
-
-  let totalDebit = 0;
-  let totalCredit = 0;
+const Expense: FC<Props> = ({ expenses }) => {
+  const totalDebit = getTotalDebit(expenses);
+  const totalCredit = getTotalCredit(expenses);
   const componentRef = useRef(null);
   return (
     <>
       {/* <Ovary showOvary={showOvary} /> */}
       <div className="card-panel" ref={componentRef}>
-        <AccountTop
-          account="Expenses Acount"
-          name={name}
-          email={email}
-          location={location}
-        />
+        <AccountTop account="Expenses Acount" />
         <TableHead>
           <div>Dr</div>
           <div>Cr</div>
@@ -71,28 +39,25 @@ const Expense: FC<CompanyProps> = ({ email, location, name }) => {
             </tr>
           </thead>
           <tbody>
-            {expenses.map((t) => {
-              t.type === "dr"
-                ? (totalDebit += t.amount)
-                : (totalCredit += t.amount);
-              return t.type === "dr" ? (
+            {expenses.map((t) =>
+              t.type === "dr" ? (
                 <Debit
-                  key={t._id}
+                  key={t.id}
                   amount={t.amount}
                   details={t.details}
-                  pd={t.pd}
+                  createdat={t.createdat}
                   code={t.code}
                 />
               ) : (
                 <Credit
-                  key={t._id}
+                  key={t.id}
                   amount={t.amount}
                   details={t.details}
-                  pd={t.pd}
+                  createdat={t.createdat}
                   code={t.code}
                 />
-              );
-            })}
+              ),
+            )}
             <tr>
               <td></td>
               <td> </td>

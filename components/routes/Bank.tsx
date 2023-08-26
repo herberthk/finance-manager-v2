@@ -4,26 +4,19 @@ import React, { useRef } from "react";
 import AccountTop from "@/components/common/AccoutTop";
 import { TableHead } from "@/components/common/comps";
 import PrintButton from "@/components/common/Print";
-import type { Bank } from "@/types";
-import { numberWithCommas } from "@/utils/helpers";
+import type { BankType } from "@/types";
+import { getTotalCredit, getTotalDebit, numberWithCommas } from "@/utils";
 
 import Credit from "../common/Credit";
 import Debit from "../common/Debit";
 
 type Props = {
-  bank: Bank[];
+  bank: BankType[];
 };
 
 const BankAccount: FC<Props> = ({ bank }) => {
-  const totalDebit = bank
-    .filter((b) => b.type === "dr")
-
-    .map((b) => b.amount)
-    .reduce((a, b) => a + b, 0);
-  const totalCredit = bank
-    .filter((b) => b.type === "cr")
-    .map((b) => b.amount)
-    .reduce((a, b) => a + b, 0);
+  const totalDebit = getTotalDebit(bank);
+  const totalCredit = getTotalCredit(bank);
   const componentRef = useRef(null);
   return (
     <>

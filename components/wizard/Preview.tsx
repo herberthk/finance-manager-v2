@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import type { FC } from "react";
 import React, { useState } from "react";
 
-import type { Database } from "@/types";
 import {
-  manageLand,
-  manageMachine,
+  initialLandTransaction,
+  initialMachineTransaction,
+  initialVehicleValue,
   manageOpeningBalance,
-  manageVehicle,
-  numberWithCommas,
-} from "@/utils";
+} from "@/transactions";
+import type { Database } from "@/types";
+import { numberWithCommas } from "@/utils";
 import { useCreateCompanyStore } from "@/zustand";
 
 import { Collapsible } from "../common/comps";
@@ -79,7 +79,7 @@ const Preview: FC<Props> = ({ user }) => {
         M.toast({ html: error.message, classes: "rounded red" });
       } else {
         // Insert transaction related to land
-        const { errors: err1 } = await manageLand({
+        const { errors: err1 } = await initialLandTransaction({
           assets,
           companyId: companyData.id,
           landValue,
@@ -87,7 +87,7 @@ const Preview: FC<Props> = ({ user }) => {
         err1 && setErrors((prev) => [...prev, ...err1]);
 
         // Insert transaction related to machine
-        const { errors: err2 } = await manageMachine({
+        const { errors: err2 } = await initialMachineTransaction({
           assets,
           companyId: companyData.id,
           machineValue,
@@ -95,7 +95,7 @@ const Preview: FC<Props> = ({ user }) => {
         err2 && setErrors((prev) => [...prev, ...err2]);
 
         // Insert transaction related to machine
-        const { errors: err3 } = await manageVehicle({
+        const { errors: err3 } = await initialVehicleValue({
           assets,
           companyId: companyData.id,
           vehicleValue,

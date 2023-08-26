@@ -83,7 +83,6 @@ export const useCreateCompanyStore = create<CreateCompanyState>()(
         prevStep: () => {
           set((state) => {
             const currentStep = state.step - 2;
-
             const completed = state.completedSteps;
             const updatedSteps = Object.keys(completed).reduce<{
               [k: number]: boolean;

@@ -2,7 +2,6 @@
 import axios from "axios";
 import includes from "lodash/includes";
 import M from "materialize-css";
-import type { FC } from "react";
 import React, { useState } from "react";
 
 import { useTypedSelector } from "@/redux/stateTypes";
@@ -10,12 +9,10 @@ import type { AxiosResponse } from "@/types";
 import { SERVER_URL } from "@/utils/constants";
 import { arrayDiffTotal, jsUcfirst, numberWithCommas } from "@/utils/helpers";
 import { useAccountBalance, useCustomDispatch } from "@/utils/hooks/hooks";
-interface Props {
-  id: string;
-}
+
 type Account = "cash" | "bank" | "";
 
-const Purchase: FC<Props> = ({ id }) => {
+const Purchase = (): React.ReactNode => {
   const { token } = useTypedSelector((state) => state.auth);
   axios.defaults.headers.common["Authorization"] = token;
   const { stockBal } = useAccountBalance();

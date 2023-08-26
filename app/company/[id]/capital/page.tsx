@@ -1,10 +1,10 @@
 import React from "react";
 
 import CapitalAccount from "@/components/routes/Capital";
-import type { Capital } from "@/types";
+import type { CapitalType } from "@/types";
 
 const Page = (): React.ReactNode => {
-  const data: Capital[] = [];
+  const data: CapitalType[] = [];
   return <CapitalAccount capital={data} />;
 };
 
