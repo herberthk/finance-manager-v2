@@ -5,6 +5,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import React from "react";
 
 import Register from "@/components/welcome/Register";
 import type { Database } from "@/types/database.types";
@@ -17,8 +18,7 @@ import type { Database } from "@/types/database.types";
 //   return createServerComponentClient<Database>({ cookies: () => cookieStore });
 // });
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const Page = async () => {
+const Page = async (): Promise<React.JSX.Element> => {
   const supabase = createServerComponentClient<Database>({ cookies });
   const {
     data: { session },
