@@ -9,7 +9,7 @@ type Params = {
   name: string;
 };
 
-export const payExpenseByCheque = async ({
+export const buyLandByCheque = async ({
   name,
   amount,
   companyId,
@@ -45,12 +45,12 @@ export const payExpenseByCheque = async ({
   err2 && errors.push(err2.message);
   // Create expense entry
   code = generateCode();
-  const { error: err3 } = await supabase.from("expense").insert([
+  const { error: err3 } = await supabase.from("land").insert([
     {
       company_id: companyId,
       code,
       amount,
-      details: `Paid ${name} by cheque`,
+      details: name,
     },
   ]);
   err3 && errors.push(err3.message);

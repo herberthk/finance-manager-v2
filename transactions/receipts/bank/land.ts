@@ -9,7 +9,7 @@ type Params = {
   name: string;
 };
 
-export const payExpenseByCheque = async ({
+export const SoldLandByCheque = async ({
   name,
   amount,
   companyId,
@@ -27,7 +27,6 @@ export const payExpenseByCheque = async ({
       code,
       amount,
       details: name,
-      type: "cr",
     },
   ]);
   err1 && errors.push(err1.message);
@@ -38,19 +37,19 @@ export const payExpenseByCheque = async ({
       company_id: companyId,
       code,
       bank: amount,
-      details: `Paid ${name} by cheque`,
-      type: "cr",
+      details: `Sold ${name} by cheque`,
     },
   ]);
   err2 && errors.push(err2.message);
   // Create expense entry
   code = generateCode();
-  const { error: err3 } = await supabase.from("expense").insert([
+  const { error: err3 } = await supabase.from("land").insert([
     {
       company_id: companyId,
       code,
       amount,
-      details: `Paid ${name} by cheque`,
+      details: `Sold ${name}`,
+      type: "cr",
     },
   ]);
   err3 && errors.push(err3.message);
@@ -63,14 +62,14 @@ export const payExpenseByCheque = async ({
       code,
       amount,
       details: name,
-      type: "dr",
+      type: "cr",
     },
     {
       company_id: companyId,
       code: code2,
       amount,
       details: "Bank",
-      type: "cr",
+      type: "dr",
     },
   ]);
   err4 && errors.push(err4.message);

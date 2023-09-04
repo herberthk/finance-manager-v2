@@ -11,7 +11,7 @@ import fl from "@/public/assets/finance.svg";
 import report from "@/public/assets/report.svg";
 import data from "@/public/assets/secure_data.svg";
 import world from "@/public/assets/world.svg";
-import { routeVariants } from "@/utils/variables";
+import { routeVariants } from "@/utils";
 
 import Footer from "./Footer";
 import Header from "./Header";

@@ -2,7 +2,7 @@ import M from "materialize-css";
 import type { FC } from "react";
 import React, { useEffect, useState } from "react";
 
-import { paymentBank, paymentCash } from "@/transactions";
+import { payExpenseByCash, payExpenseByCheque } from "@/transactions";
 import { numberWithCommas } from "@/utils";
 import { useCompanyStore } from "@/zustand";
 
@@ -13,7 +13,7 @@ type Props = {
   bankBalance: number;
 };
 
-const Pay: FC<Props> = ({ bankBalance, cashBalance }) => {
+const PayExpense: FC<Props> = ({ bankBalance, cashBalance }) => {
   useEffect(() => {
     M.AutoInit();
   }, []);
@@ -66,7 +66,7 @@ const Pay: FC<Props> = ({ bankBalance, cashBalance }) => {
     try {
       if (account === "cash") {
         // Pay with cash
-        const { errors } = await paymentCash({
+        const { errors } = await payExpenseByCash({
           amount,
           // The company in store was initialized with null
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -77,7 +77,7 @@ const Pay: FC<Props> = ({ bankBalance, cashBalance }) => {
       }
       if (account === "bank") {
         // Pay with bank account
-        const { errors } = await paymentBank({
+        const { errors } = await payExpenseByCheque({
           amount,
           // The company in store was initialized with null
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -190,4 +190,4 @@ const Pay: FC<Props> = ({ bankBalance, cashBalance }) => {
   );
 };
 
-export default Pay;
+export default PayExpense;

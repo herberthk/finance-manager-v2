@@ -14,6 +14,7 @@ type Props = {
   vehicleBalance: number;
   machineBalance: number;
 };
+
 const SellAsset: FC<Props> = ({
   landBalance,
   machineBalance,

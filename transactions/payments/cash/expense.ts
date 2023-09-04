@@ -8,7 +8,8 @@ type Params = {
   amount: number;
   name: string;
 };
-export const paymentCash = async ({
+
+export const payExpenseByCash = async ({
   amount,
   companyId,
   name,
@@ -47,7 +48,7 @@ export const paymentCash = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details: `Paid ${name} by cash`,
     },
   ]);
   err3 && errors.push(err3.message);

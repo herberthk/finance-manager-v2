@@ -1,9 +1,9 @@
 import React from "react";
 
-import Pay from "@/components/transaction/Pay";
+import PayExpense from "@/components/transaction/PayExpense";
 
 const Page = (): React.ReactNode => {
-  return <Pay bankBalance={0} cashBalance={0} />;
+  return <PayExpense bankBalance={0} cashBalance={0} />;
 };
 
 export default Page;

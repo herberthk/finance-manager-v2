@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useLayoutEffect, useState } from "react";
 
 import type { Database } from "@/types/database.types";
-import { transition } from "@/utils/variables";
+import { transition } from "@/utils";
 
 import {
   FildSpan,

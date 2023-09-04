@@ -6,10 +6,7 @@ import M from "materialize-css";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 
-import { actionTypes } from "@/redux/actions";
 import { useThunkDispatch, useTypedSelector } from "@/redux/stateTypes";
-import type { AxiosResponse } from "@/types";
-import { SERVER_URL } from "@/utils/constants";
 import { transition } from "@/utils/variables";
 
 import {
@@ -50,38 +47,38 @@ const Confirm = (): React.ReactNode => {
       setLockShow(false);
     }, 2000);
   };
-  const submit = async () => {
-    if (!code) {
-      M.toast({ html: "Activation code is required", classes: "rounded red" });
-      manageLocker();
-      return;
-    }
-    openOvary();
+  // const submit = async () => {
+  //   if (!code) {
+  //     M.toast({ html: "Activation code is required", classes: "rounded red" });
+  //     manageLocker();
+  //     return;
+  //   }
+  //   openOvary();
 
-    try {
-      const res = await axios.post(`${SERVER_URL}/code/verify`, {
-        code,
-        email,
-      });
+  //   try {
+  //     const res = await axios.post(`${SERVER_URL}/code/verify`, {
+  //       code,
+  //       email,
+  //     });
 
-      closeOvary();
-      const { success, error, info } = res.data as AxiosResponse;
-      if (!success) {
-        M.toast({ html: error, classes: "rounded red" });
-        manageLocker();
-      } else {
-        dispatch({
-          type: actionTypes.CONFIRM,
-        });
-        M.toast({ html: info, classes: "rounded green" });
-        closeOvary();
-      }
-    } catch (error) {
-      closeOvary();
-    } finally {
-      closeOvary();
-    }
-  };
+  //     closeOvary();
+  //     const { success, error, info } = res.data as AxiosResponse;
+  //     if (!success) {
+  //       M.toast({ html: error, classes: "rounded red" });
+  //       manageLocker();
+  //     } else {
+  //       dispatch({
+  //         type: actionTypes.CONFIRM,
+  //       });
+  //       M.toast({ html: info, classes: "rounded green" });
+  //       closeOvary();
+  //     }
+  //   } catch (error) {
+  //     closeOvary();
+  //   } finally {
+  //     closeOvary();
+  //   }
+  // };
 
   useLayoutEffect(() => {
     M.AutoInit();
@@ -92,99 +89,90 @@ const Confirm = (): React.ReactNode => {
     };
   }, []);
 
-  const sendCode = async () => {
-    if (!email) {
-      return;
-    }
-    // alert(email);
-    openOvary();
-    try {
-      const res = await axios.post(`${SERVER_URL}/code/create`, {
-        email,
-      });
+  // const sendCode = async () => {
+  //   if (!email) {
+  //     return;
+  //   }
+  //   // alert(email);
+  //   openOvary();
+  //   try {
+  //     const res = await axios.post(`${SERVER_URL}/code/create`, {
+  //       email,
+  //     });
 
-      closeOvary();
-      const { success, error, info } = res.data as AxiosResponse;
-      if (!success) {
-        M.toast({ html: error, classes: "rounded red" });
-        setInvalid(true);
-      } else {
-        M.toast({ html: info, classes: "rounded green" });
-      }
-    } catch (error) {
-      closeOvary();
-    }
-  };
+  //     closeOvary();
+  //     const { success, error, info } = res.data as AxiosResponse;
+  //     if (!success) {
+  //       M.toast({ html: error, classes: "rounded red" });
+  //       setInvalid(true);
+  //     } else {
+  //       M.toast({ html: info, classes: "rounded green" });
+  //     }
+  //   } catch (error) {
+  //     closeOvary();
+  //   }
+  // };
 
   useEffect(() => {
     sendCode();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!pending || invalid) {
-    // return <Redirect to="/login" />;
-    router.push("/login");
-    return;
-  } else if (loggedIn) {
-    // return <Redirect to="/companies" />;
-    router.push("/companies");
-    return;
-  } else
-    return (
-      <motion.div
-      // initial={{ y: '100vh' }}
-      // animate={{ y: 0 }}
-      //   initial="exit"
-      //   animate="enter"
-      //   exit="exit"
-      //   variants={routeVariants}
-      >
-        <Header isHome={false} />
-        <Ovary showOvary={showOvary} />
-        <FormWraper
+  return (
+    <motion.div
+    // initial={{ y: '100vh' }}
+    // animate={{ y: 0 }}
+    //   initial="exit"
+    //   animate="enter"
+    //   exit="exit"
+    //   variants={routeVariants}
+    >
+      <Header isHome={false} />
+      <Ovary showOvary={showOvary} />
+      <FormWraper
+        initial={{ y: "100vh" }}
+        animate={{ y: 0, transition: { duration: 0.1, transition } }}>
+        <Locker lockShow={lockShow} />
+        <p className="security_top">
+          We have sent security code to {email} so check your email and make
+          sure the email provided is valid
+        </p>
+        <FormHeader>Enter Security code</FormHeader>
+        <FormTop>
+          <div className="input-field col s12 field">
+            <i className="tiny material-icons white-text prefix">lock</i>
+            <input
+              id="code"
+              type="text"
+              className="white-text input_border"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+            />
+            <FildSpan />
+            <label htmlFor="code">Enter security code</label>
+          </div>
+        </FormTop>
+        <FormBottom>
+          <button className="waves-effect waves-light" onClick={submit}>
+            log in
+          </button>
+        </FormBottom>
+        <Seperator>
+          <Devider />
+          <DeviderLable>OR</DeviderLable>
+          <Devider />
+        </Seperator>
+        <motion.button
+          onClick={sendCode}
           initial={{ y: "100vh" }}
-          animate={{ y: 0, transition: { duration: 0.1, transition } }}>
-          <Locker lockShow={lockShow} />
-          <p className="security_top">
-            We have sent security code to {email} so check your email and make
-            sure the email provided is valid
-          </p>
-          <FormHeader>Enter Security code</FormHeader>
-          <FormTop>
-            <div className="input-field col s12 field">
-              <i className="tiny material-icons white-text prefix">lock</i>
-              <input
-                id="code"
-                type="text"
-                className="white-text input_border"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-              />
-              <FildSpan />
-              <label htmlFor="code">Enter security code</label>
-            </div>
-          </FormTop>
-          <FormBottom>
-            <button className="waves-effect waves-light" onClick={submit}>
-              log in
-            </button>
-          </FormBottom>
-          <Seperator>
-            <Devider />
-            <DeviderLable>OR</DeviderLable>
-            <Devider />
-          </Seperator>
-          <motion.button
-            onClick={sendCode}
-            initial={{ y: "100vh" }}
-            animate={{ y: 0 }}
-            className="btn google orange waves-effect waves-light btn-large">
-            <b>Resend security code</b>
-            <i className="material-icons right">autorenew</i>
-          </motion.button>
-        </FormWraper>
-      </motion.div>
-    );
+          animate={{ y: 0 }}
+          className="btn google orange waves-effect waves-light btn-large">
+          <b>Resend security code</b>
+          <i className="material-icons right">autorenew</i>
+        </motion.button>
+      </FormWraper>
+    </motion.div>
+  );
 };
 
 export default Confirm;
