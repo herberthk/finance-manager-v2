@@ -15,6 +15,7 @@ const Debit: FC<Partial<Account>> = ({ amount, details }) => {
     </tr>
   );
 };
+
 const Credit: FC<Partial<Account>> = ({ amount, details }) => {
   return (
     <tr>

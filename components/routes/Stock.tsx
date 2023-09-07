@@ -13,10 +13,8 @@ const Item: FC<Partial<StockType>> = ({
   price,
   createdat,
   quantity,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  selling_price,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  quantity_sold,
+  selling_price: sellingPrice,
+  quantity_sold: quantitySold,
 }) => {
   return (
     <tr>
@@ -24,8 +22,8 @@ const Item: FC<Partial<StockType>> = ({
       <td>{item}</td>
       <td className="center">{numberWithCommas(quantity ?? 0)}</td>
       <td className="center">{numberWithCommas(price ?? 0)}</td>
-      <td className="center">{numberWithCommas(selling_price ?? 0)}</td>
-      <td className="center">{numberWithCommas(quantity_sold ?? 0)}</td>
+      <td className="center">{numberWithCommas(sellingPrice ?? 0)}</td>
+      <td className="center">{numberWithCommas(quantitySold ?? 0)}</td>
     </tr>
   );
 };
@@ -36,7 +34,11 @@ type Props = {
 
 const Stock: FC<Props> = ({ stock }) => {
   const totalQty = stock.map((c) => c.quantity).reduce((a, b) => a + b, 0);
-  const sold = stock.map((c) => c.quantity_sold).reduce((a, b) => a + b, 0);
+
+  const sold =
+    stock
+      .map((c) => c.quantity_sold)
+      .reduce((a, b) => (a ?? 0) + (b ?? 0), 0) ?? 0;
   const componentRef = useRef(null);
   return (
     <>

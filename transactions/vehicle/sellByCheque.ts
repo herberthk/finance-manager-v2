@@ -6,26 +6,25 @@ import { generateCode } from "@/utils";
 type Params = {
   companyId: string;
   amount: number;
-  name: string;
+  details: string;
 };
 
-export const buyVehicleByCash = async ({
+export const sellVehicleByCheque = async ({
   amount,
   companyId,
-  name,
+  details,
 }: Params): Promise<{ errors: string[] }> => {
   const errors: string[] = [];
   const supabase = createClientComponentClient<Database>();
   let code;
   code = generateCode();
   // Create entry in cash account
-  const { error: err1 } = await supabase.from("cash").insert([
+  const { error: err1 } = await supabase.from("bank").insert([
     {
       company_id: companyId,
       code,
       amount,
-      details: name,
-      type: "cr",
+      details,
     },
   ]);
 
@@ -37,8 +36,7 @@ export const buyVehicleByCash = async ({
       company_id: companyId,
       code,
       cash: amount,
-      details: `Paid ${name} by cash`,
-      type: "cr",
+      details,
     },
   ]);
   err2 && errors.push(err2.message);
@@ -49,7 +47,8 @@ export const buyVehicleByCash = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
+      type: "cr",
     },
   ]);
   err3 && errors.push(err3.message);
@@ -61,15 +60,15 @@ export const buyVehicleByCash = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
-      type: "dr",
+      details,
+      type: "cr",
     },
     {
       company_id: companyId,
       code: code2,
       amount,
-      details: "Cash",
-      type: "cr",
+      details,
+      type: "dr",
     },
   ]);
   err4 && errors.push(err4.message);

@@ -5,14 +5,16 @@ import { generateCode } from "@/utils";
 
 type Params = {
   companyId: string;
-  amount: number;
-  name: string;
+  quantity: number;
+  itemName: string;
+  sellingPrice: number;
 };
 
-export const buyLandByCash = async ({
-  amount,
+export const sellStockWithCash = async ({
   companyId,
-  name,
+  itemName,
+  quantity,
+  sellingPrice,
 }: Params): Promise<{ errors: string[] }> => {
   const errors: string[] = [];
   const supabase = createClientComponentClient<Database>();
@@ -23,9 +25,8 @@ export const buyLandByCash = async ({
     {
       company_id: companyId,
       code,
-      amount,
-      details: name,
-      type: "cr",
+      amount: sellingPrice * quantity,
+      details: itemName,
     },
   ]);
 
@@ -36,23 +37,32 @@ export const buyLandByCash = async ({
     {
       company_id: companyId,
       code,
-      cash: amount,
-      details: `Paid ${name} by cash`,
-      type: "cr",
+      cash: sellingPrice * quantity,
+      details: `Sold ${quantity} ${itemName} with cash`,
     },
   ]);
   err2 && errors.push(err2.message);
-  // Create expense entry
+  // Increment quantity of sold stock
+  const { error: err3 } = await supabase.rpc("increment_sold_stock", {
+    company_id: companyId,
+    item: itemName,
+    quantity,
+  });
+
+  err3 && errors.push(err3.message);
+
+  // Create sales account entry
   code = generateCode();
-  const { error: err3 } = await supabase.from("land").insert([
+  const { error } = await supabase.from("sales").insert([
     {
       company_id: companyId,
       code,
-      amount,
-      details: name,
+      amount: sellingPrice * quantity,
+      details: `Sold ${quantity} ${itemName} with cash`,
     },
   ]);
-  err3 && errors.push(err3.message);
+
+  error && errors.push(error.message);
   // Create Journal entries
   code = generateCode();
   const code2 = generateCode();
@@ -60,15 +70,15 @@ export const buyLandByCash = async ({
     {
       company_id: companyId,
       code,
-      amount,
-      details: name,
+      amount: sellingPrice * quantity,
+      details: `Sold ${quantity} ${itemName} with cash`,
       type: "dr",
     },
     {
       company_id: companyId,
       code: code2,
-      amount,
-      details: "Cash",
+      amount: sellingPrice * quantity,
+      details: `Sold ${quantity} ${itemName} with cash`,
       type: "cr",
     },
   ]);

@@ -6,13 +6,13 @@ import { generateCode } from "@/utils";
 type Params = {
   companyId: string;
   amount: number;
-  name: string;
+  details: string;
 };
 
-export const soldVehicleByCash = async ({
+export const sellMachineByCash = async ({
   amount,
   companyId,
-  name,
+  details,
 }: Params): Promise<{ errors: string[] }> => {
   const errors: string[] = [];
   const supabase = createClientComponentClient<Database>();
@@ -24,7 +24,7 @@ export const soldVehicleByCash = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
     },
   ]);
 
@@ -36,18 +36,18 @@ export const soldVehicleByCash = async ({
       company_id: companyId,
       code,
       cash: amount,
-      details: `Sold ${name} by cash`,
+      details,
     },
   ]);
   err2 && errors.push(err2.message);
   // Create expense entry
   code = generateCode();
-  const { error: err3 } = await supabase.from("vehicle").insert([
+  const { error: err3 } = await supabase.from("machine").insert([
     {
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
       type: "cr",
     },
   ]);
@@ -60,14 +60,14 @@ export const soldVehicleByCash = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
       type: "cr",
     },
     {
       company_id: companyId,
       code: code2,
       amount,
-      details: "Cash",
+      details,
       type: "dr",
     },
   ]);

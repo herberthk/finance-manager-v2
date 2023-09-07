@@ -1,14 +1,16 @@
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
-import Purchase from "./PurchaseStock";
+import type { StockType } from "@/types";
+
+import BuyStock from "./Buy";
 import SellStock from "./Sell";
 
 const ManageStock = (): React.ReactNode => {
   useEffect(() => {
     M.AutoInit();
   }, []);
-
+  const stockItems: StockType[] = [];
   return (
     <>
       <h5 className="center black-text">Stock management</h5>
@@ -26,10 +28,10 @@ const ManageStock = (): React.ReactNode => {
       </ul>
       <div className="row">
         <div id="buyStock" className="col s12">
-          <Purchase />
+          <BuyStock bankBal={0} cashBal={0} />
         </div>
         <div id="sellStock" className="col s12">
-          <SellStock />
+          <SellStock bankBal={0} cashBal={0} stockItems={stockItems} />
         </div>
       </div>
     </>

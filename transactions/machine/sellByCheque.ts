@@ -6,29 +6,28 @@ import { generateCode } from "@/utils";
 type Params = {
   companyId: string;
   amount: number;
-  name: string;
+  details: string;
 };
 
-export const SoldLandByCheque = async ({
-  name,
+export const sellMachineByCheque = async ({
   amount,
   companyId,
-}: Params): Promise<{
-  errors: string[];
-}> => {
+  details,
+}: Params): Promise<{ errors: string[] }> => {
   const errors: string[] = [];
   const supabase = createClientComponentClient<Database>();
   let code;
   code = generateCode();
-  // Create entry in bank account
+  // Create entry in cash account
   const { error: err1 } = await supabase.from("bank").insert([
     {
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
     },
   ]);
+
   err1 && errors.push(err1.message);
   // Create cashbook entry
   code = generateCode();
@@ -36,19 +35,19 @@ export const SoldLandByCheque = async ({
     {
       company_id: companyId,
       code,
-      bank: amount,
-      details: `Sold ${name} by cheque`,
+      cash: amount,
+      details,
     },
   ]);
   err2 && errors.push(err2.message);
   // Create expense entry
   code = generateCode();
-  const { error: err3 } = await supabase.from("land").insert([
+  const { error: err3 } = await supabase.from("machine").insert([
     {
       company_id: companyId,
       code,
       amount,
-      details: `Sold ${name}`,
+      details,
       type: "cr",
     },
   ]);
@@ -61,14 +60,14 @@ export const SoldLandByCheque = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
       type: "cr",
     },
     {
       company_id: companyId,
       code: code2,
       amount,
-      details: "Bank",
+      details,
       type: "dr",
     },
   ]);

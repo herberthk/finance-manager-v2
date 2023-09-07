@@ -2,46 +2,34 @@ import M from "materialize-css";
 import type { FC } from "react";
 import React, { useState } from "react";
 
-import { sellStockWithCash, sellStockWithCheque } from "@/transactions";
-import type { StockType } from "@/types";
-import { numberWithCommas } from "@/utils/helpers";
+import { buyStockWithCash, buyStockWithCheque } from "@/transactions";
+import { numberWithCommas } from "@/utils";
 import { useCompanyStore } from "@/zustand";
 
 type Account = "cash" | "bank" | "";
-
 type Props = {
   cashBal: number;
   bankBal: number;
-  stockItems: StockType[];
 };
 
-const SellStock: FC<Props> = ({ bankBal, cashBal, stockItems }) => {
+const BuyStock: FC<Props> = ({ bankBal, cashBal }) => {
   const id = useCompanyStore((state) => state.company?.id);
   const [itemName, setItemName] = useState("");
-  const [sellingPrice, setSellingPrice] = useState<number>(0);
+  const [price, setPrice] = useState<number>();
+  const [sellingPrice, setSellingPrice] = useState<number>();
   const [quantity, setQuantity] = useState<number>();
   const [account, setAccount] = useState<Account>("");
   const [loading, setLoading] = useState(false);
-  const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
-  const [unitPrice, setUnitPrice] = useState(0);
   const [errors, setErrors] = useState<string[]>([]);
-
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
     setAccount(e.target.value as Account);
-  const selectItem = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const item = stockItems.filter((t) => t.item === e.target.value);
+  const selectItem = (e: React.ChangeEvent<HTMLInputElement>) =>
     setItemName(e.target.value);
-    const selectedItem = { ...item[0] };
-    const quantitySold = selectedItem.quantity_sold ?? 0;
-    setSelectedQuantity(selectedItem.quantity - quantitySold);
-    setUnitPrice(selectedItem.price);
-    setSellingPrice(selectedItem.selling_price);
-  };
 
   const send = async () => {
-    if (!itemName || !sellingPrice || !quantity) {
+    if (!itemName || !price || !quantity || !sellingPrice) {
       M.toast({
-        html: "Item name, quantity are required",
+        html: "Item name, unit price, quantity and selling are required",
         classes: "rounded red",
       });
       return;
@@ -53,23 +41,40 @@ const SellStock: FC<Props> = ({ bankBal, cashBal, stockItems }) => {
       });
       return;
     }
-    if (quantity > selectedQuantity) {
-      M.toast({
-        html: "Insuficient quantity",
-        classes: "rounded red",
-      });
-      M.toast({
-        html: `Only ${selectedQuantity} ${itemName} are available`,
-        classes: "rounded red",
-      });
-      return;
+
+    if (account === "cash") {
+      if (price * quantity > cashBal) {
+        M.toast({
+          html: "Insuficient cash balance",
+          classes: "rounded red",
+        });
+        M.toast({
+          html: `Your cash balance is $ ${numberWithCommas(cashBal)}`,
+          classes: "rounded red",
+        });
+        return;
+      }
+    }
+    if (account === "bank") {
+      if (price * quantity > bankBal) {
+        M.toast({
+          html: "Insuficient bank balance",
+          classes: "rounded red",
+        });
+        M.toast({
+          html: `Your bank balance is $ ${numberWithCommas(bankBal)}`,
+          classes: "rounded red",
+        });
+        return;
+      }
     }
     if (!id) return;
     try {
       setLoading(true);
       if (account === "cash") {
-        // sell with cash
-        const { errors } = await sellStockWithCash({
+        // buy with cash
+        const { errors } = await buyStockWithCash({
+          price,
           quantity,
           sellingPrice,
           itemName,
@@ -78,8 +83,9 @@ const SellStock: FC<Props> = ({ bankBal, cashBal, stockItems }) => {
         errors && setErrors((prev) => [...prev, ...errors]);
       }
       if (account === "bank") {
-        // sell with cheque
-        const { errors } = await sellStockWithCheque({
+        // buy with cheque
+        const { errors } = await buyStockWithCheque({
+          price,
           quantity,
           sellingPrice,
           itemName,
@@ -96,8 +102,8 @@ const SellStock: FC<Props> = ({ bankBal, cashBal, stockItems }) => {
       }
       M.toast({ html: "Success", classes: "rounded green" });
       setItemName("");
-      setUnitPrice(0);
-      setSellingPrice(0);
+      setPrice(undefined);
+      setSellingPrice(undefined);
       setQuantity(undefined);
       setAccount("");
       setErrors([]);
@@ -106,32 +112,22 @@ const SellStock: FC<Props> = ({ bankBal, cashBal, stockItems }) => {
       M.toast({ html: "Error try again", classes: "rounded red" });
     }
   };
-
-  //   console.log('My items', items);
+  // console.log('Available', available);
   return (
     <div className="card-panel">
       <div className="row">
         <div className="input-field col s12">
-          <select onChange={selectItem}>
-            <option
-              className="black-text"
-              selected
-              disabled
-              defaultValue={itemName}>
-              Select item to sell
-            </option>
-            {stockItems.map(
-              (t) =>
-                t.quantity > 0 && (
-                  <option key={t.id} className="black-text" value={t.item}>
-                    {t.item}
-                  </option>
-                ),
-            )}
-          </select>
-          <label htmlFor="ggg">
-            <b>Select item to sell</b>
-          </label>
+          <i className="material-icons prefix teal-text">
+            account_balance_wallet
+          </i>
+          <input
+            id="item"
+            defaultValue={itemName}
+            onChange={selectItem}
+            type="text"
+            className="validate black-text"
+          />
+          <label htmlFor="name">What do you want to buy</label>
         </div>
 
         <div className="input-field col s12">
@@ -150,23 +146,10 @@ const SellStock: FC<Props> = ({ bankBal, cashBal, stockItems }) => {
               Bank
             </option>
           </select>
-          <label htmlFor="qty">
+          <label htmlFor="yt">
             <b>Buy asset using:</b>
           </label>
         </div>
-        {itemName && (
-          <ul className="collection">
-            <li className="collection-item black-text">
-              Quantity available: <b>{numberWithCommas(selectedQuantity)}</b>
-            </li>
-            <li className="collection-item black-text">
-              Unit price: $ <b>{numberWithCommas(unitPrice)}</b>
-            </li>
-            <li className="collection-item black-text">
-              Selling price: $ <b>{numberWithCommas(sellingPrice)}</b>
-            </li>
-          </ul>
-        )}
         {account && (
           <ul className="collection">
             {account === "cash" && (
@@ -182,18 +165,43 @@ const SellStock: FC<Props> = ({ bankBal, cashBal, stockItems }) => {
           </ul>
         )}
 
+        <div className="input-field col s12">
+          <i className="material-icons prefix teal-text">attach_money</i>
+          <input
+            id="pice"
+            defaultValue={price}
+            onChange={(e) => setPrice(+e.target.value)}
+            type="number"
+            className="validate black-text"
+          />
+          <label htmlFor="price">Unit price</label>
+        </div>
+
         {itemName && (
-          <div className="input-field col s12">
-            <i className="material-icons prefix teal-text">control_point</i>
-            <input
-              id="qty"
-              defaultValue={quantity}
-              onChange={(e) => setQuantity(+e.target.value)}
-              type="number"
-              className="validate black-text"
-            />
-            <label htmlFor="qty">Quantity you are selling</label>
-          </div>
+          <>
+            <div className="input-field col s12">
+              <i className="material-icons prefix teal-text">control_point</i>
+              <input
+                id="qty"
+                defaultValue={quantity}
+                onChange={(e) => setQuantity(+e.target.value)}
+                type="number"
+                className="validate black-text"
+              />
+              <label htmlFor="qty">Quantity</label>
+            </div>
+            <div className="input-field col s12">
+              <i className="material-icons prefix teal-text">control_point</i>
+              <input
+                id="sp"
+                defaultValue={sellingPrice}
+                onChange={(e) => setSellingPrice(+e.target.value)}
+                type="number"
+                className="validate black-text"
+              />
+              <label htmlFor="sp">Selling price</label>
+            </div>
+          </>
         )}
 
         <div className="clearfix"></div>
@@ -214,4 +222,4 @@ const SellStock: FC<Props> = ({ bankBal, cashBal, stockItems }) => {
   );
 };
 
-export default SellStock;
+export default BuyStock;

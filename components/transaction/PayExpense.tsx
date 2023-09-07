@@ -62,15 +62,14 @@ const PayExpense: FC<Props> = ({ bankBalance, cashBalance }) => {
         return;
       }
     }
+    if (!id) return;
     setLoading(true);
     try {
       if (account === "cash") {
         // Pay with cash
         const { errors } = await payExpenseByCash({
           amount,
-          // The company in store was initialized with null
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          companyId: id!,
+          companyId: id,
           name,
         });
         errors && setErrors((prev) => [...prev, ...errors]);
@@ -79,9 +78,8 @@ const PayExpense: FC<Props> = ({ bankBalance, cashBalance }) => {
         // Pay with bank account
         const { errors } = await payExpenseByCheque({
           amount,
-          // The company in store was initialized with null
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          companyId: id!,
+
+          companyId: id,
           name,
         });
         errors && setErrors((prev) => [...prev, ...errors]);

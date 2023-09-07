@@ -7,7 +7,7 @@ create table public.stock (
   price integer not null,
   quantity integer not null,
   selling_price integer not null,
-  quantity_sold integer not null,
+  quantity_sold integer,
   company_id uuid references company not null,
   createdAt timestamp with time zone default timezone('utc'::text, now()) not null,
   updatedAt timestamp (0),

@@ -4,6 +4,14 @@ import M from "materialize-css";
 import type { FC } from "react";
 import React, { useState } from "react";
 
+import {
+  buyLandByCash,
+  buyLandByCheque,
+  buyMachineByCash,
+  buyMachineByCheque,
+  buyVehicleByCash,
+  buyVehicleByCheque,
+} from "@/transactions";
 import { numberWithCommas } from "@/utils";
 import { useCompanyStore } from "@/zustand";
 
@@ -17,11 +25,12 @@ type Props = {
 
 const BuyAsset: FC<Props> = ({ bankBalance, cashBalance }) => {
   const id = useCompanyStore((state) => state.company?.id);
-
   const [name, setName] = useState<Name>("");
+  const [details, setDetails] = useState("");
   const [amount, setAmount] = useState<number>();
   const [account, setAccount] = useState<Account>("cash");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const change = (e: React.ChangeEvent<HTMLSelectElement>) =>
     setAccount(e.target.value as Account);
@@ -34,18 +43,16 @@ const BuyAsset: FC<Props> = ({ bankBalance, cashBalance }) => {
       });
       return;
     }
-    // console.log('asset name', name);
-    // return;
-    // const nm: number = amount;
-    // console.log(amount instanceof number);
-    // console.log('is number', isFinite(amount));
-    // if (!isFinite(amount)) {
-    //   M.toast({
-    //     html: 'Invalid amount format, remove commas',
-    //     classes: 'rounded red',
-    //   });
-    //   return;
-    // }
+
+    // If amount is not a number
+    if (!isFinite(amount)) {
+      M.toast({
+        html: "Invalid amount format, remove commas",
+        classes: "rounded red",
+      });
+      return;
+    }
+
     if (account === "cash") {
       if (amount > cashBalance) {
         M.toast({
@@ -59,6 +66,7 @@ const BuyAsset: FC<Props> = ({ bankBalance, cashBalance }) => {
         return;
       }
     }
+
     if (account === "bank") {
       if (amount > bankBalance) {
         M.toast({
@@ -72,26 +80,81 @@ const BuyAsset: FC<Props> = ({ bankBalance, cashBalance }) => {
         return;
       }
     }
-    setLoading(true);
+    if (!id) return;
+
     try {
-      // return;
-      const res = await axios.post(`${SERVER_URL}/transaction/buyasset`, {
-        amount,
-        name,
-        account,
-        id,
-      });
-      const { success, error } = res.data as AxiosResponse;
-      setLoading(false);
-      if (!success) {
-        M.toast({ html: error, classes: "rounded red" });
-        // setInvalid(true);
-      } else {
-        M.toast({ html: "Success", classes: "rounded green" });
-        setAmount(undefined);
-        setName("");
-        // }
+      setLoading(true);
+      if (name === "land") {
+        if (account === "cash") {
+          // buy with cash
+          const { errors } = await buyLandByCash({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+        if (account === "bank") {
+          // Buy with cheque
+          const { errors } = await buyLandByCheque({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
       }
+      if (name === "machine") {
+        if (account === "cash") {
+          // buy with cash
+          const { errors } = await buyMachineByCash({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+        if (account === "bank") {
+          // Pay with cheque
+          const { errors } = await buyMachineByCheque({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+      }
+      if (name === "vehicle") {
+        if (account === "cash") {
+          // buy with cash
+          const { errors } = await buyVehicleByCash({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+        if (account === "bank") {
+          // Pay with cheque
+          const { errors } = await buyVehicleByCheque({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+      }
+      setLoading(false);
+      if (errors.length > 0) {
+        errors.forEach((error) =>
+          M.toast({ html: error, classes: "rounded red" }),
+        );
+        return;
+      }
+      M.toast({ html: "Success", classes: "rounded green" });
+      setAmount(undefined);
+      setName("");
+      setDetails("");
     } catch (error) {
       setLoading(false);
       M.toast({ html: "Error try again", classes: "rounded red" });

@@ -55,7 +55,7 @@ const BalanceSheet = (): React.ReactNode => {
             </tr>
           </thead>
           <tbody>
-            {fixedAssetAvailable() && (
+            {fixedAssetAvailable && (
               <tr>
                 <td>
                   <b>Fixed assets</b>

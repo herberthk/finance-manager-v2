@@ -1,8 +1,15 @@
-import axios from "axios";
 import M from "materialize-css";
 import type { FC } from "react";
 import React, { useState } from "react";
 
+import {
+  sellLandByCash,
+  SellLandByCheque,
+  sellMachineByCash,
+  sellMachineByCheque,
+  sellVehicleByCash,
+  sellVehicleByCheque,
+} from "@/transactions";
 import { numberWithCommas } from "@/utils";
 import { useCompanyStore } from "@/zustand";
 
@@ -23,9 +30,11 @@ const SellAsset: FC<Props> = ({
   const id = useCompanyStore((state) => state.company?.id);
 
   const [name, setName] = useState<Name>("");
+  const [details, setDetails] = useState("");
   const [amount, setAmount] = useState<number>();
   const [account, setAccount] = useState<Account>("");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const changeAccount = (e: React.ChangeEvent<HTMLSelectElement>) =>
     setAccount(e.target.value as Account);
@@ -68,25 +77,82 @@ const SellAsset: FC<Props> = ({
         return;
       }
     }
-    setLoading(true);
+    if (!id) return;
     try {
-      // return;
-      const res = await axios.post(`${SERVER_URL}/transaction/sellasset`, {
-        amount,
-        name,
-        account,
-        id,
-      });
-      const { success, error } = res.data as AxiosResponse;
-      setLoading(false);
-      if (!success) {
-        M.toast({ html: error, classes: "rounded red" });
-        // setInvalid(true);
-      } else {
-        M.toast({ html: "Success", classes: "rounded green" });
+      setLoading(true);
+      if (name === "land") {
+        if (account === "cash") {
+          // Sell with cash
+          const { errors } = await sellLandByCash({
+            amount,
 
-        // }
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+        if (account === "bank") {
+          // Sell with cheque
+          const { errors } = await SellLandByCheque({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
       }
+      if (name === "machine") {
+        if (account === "cash") {
+          // Sell with cash
+          const { errors } = await sellMachineByCash({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+        if (account === "bank") {
+          // Sell with cheque
+          const { errors } = await sellMachineByCheque({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+      }
+
+      if (name === "vehicle") {
+        if (account === "cash") {
+          // Sell with cash
+          const { errors } = await sellVehicleByCash({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+        if (account === "bank") {
+          // Sell with cheque
+          const { errors } = await sellVehicleByCheque({
+            amount,
+            companyId: id,
+            details,
+          });
+          errors && setErrors((prev) => [...prev, ...errors]);
+        }
+      }
+      setLoading(false);
+      if (errors.length > 0) {
+        errors.forEach((error) =>
+          M.toast({ html: error, classes: "rounded red" }),
+        );
+        return;
+      }
+      M.toast({ html: "Success", classes: "rounded green" });
+      setAmount(undefined);
+      setName("");
+      setDetails("");
     } catch (error) {
       setLoading(false);
       M.toast({ html: "Error try again", classes: "rounded red" });

@@ -6,11 +6,11 @@ import { generateCode } from "@/utils";
 type Params = {
   companyId: string;
   amount: number;
-  name: string;
+  details: string;
 };
 
-export const buyVehicleByCheque = async ({
-  name,
+export const buyLandByCheque = async ({
+  details,
   amount,
   companyId,
 }: Params): Promise<{
@@ -26,7 +26,7 @@ export const buyVehicleByCheque = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
       type: "cr",
     },
   ]);
@@ -38,19 +38,19 @@ export const buyVehicleByCheque = async ({
       company_id: companyId,
       code,
       bank: amount,
-      details: `Paid ${name} by cheque`,
+      details,
       type: "cr",
     },
   ]);
   err2 && errors.push(err2.message);
   // Create expense entry
   code = generateCode();
-  const { error: err3 } = await supabase.from("vehicle").insert([
+  const { error: err3 } = await supabase.from("land").insert([
     {
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
     },
   ]);
   err3 && errors.push(err3.message);
@@ -62,14 +62,14 @@ export const buyVehicleByCheque = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
       type: "dr",
     },
     {
       company_id: companyId,
       code: code2,
       amount,
-      details: "Bank",
+      details,
       type: "cr",
     },
   ]);

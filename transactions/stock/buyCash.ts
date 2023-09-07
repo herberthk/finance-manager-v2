@@ -5,26 +5,31 @@ import { generateCode } from "@/utils";
 
 type Params = {
   companyId: string;
-  amount: number;
-  name: string;
+  price: number;
+  quantity: number;
+  itemName: string;
+  sellingPrice: number;
 };
 
-export const soldVehicleByCheque = async ({
-  amount,
+export const buyStockWithCash = async ({
   companyId,
-  name,
+  itemName,
+  price,
+  quantity,
+  sellingPrice,
 }: Params): Promise<{ errors: string[] }> => {
   const errors: string[] = [];
   const supabase = createClientComponentClient<Database>();
   let code;
   code = generateCode();
   // Create entry in cash account
-  const { error: err1 } = await supabase.from("bank").insert([
+  const { error: err1 } = await supabase.from("cash").insert([
     {
       company_id: companyId,
       code,
-      amount,
-      details: name,
+      amount: price * quantity,
+      details: itemName,
+      type: "cr",
     },
   ]);
 
@@ -35,20 +40,22 @@ export const soldVehicleByCheque = async ({
     {
       company_id: companyId,
       code,
-      cash: amount,
-      details: `Sold ${name} by cheque`,
+      cash: price * quantity,
+      details: `Purchased ${quantity} ${itemName} with cash`,
+      type: "cr",
     },
   ]);
   err2 && errors.push(err2.message);
   // Create expense entry
   code = generateCode();
-  const { error: err3 } = await supabase.from("vehicle").insert([
+  const { error: err3 } = await supabase.from("stock").insert([
     {
       company_id: companyId,
       code,
-      amount,
-      details: name,
-      type: "cr",
+      price,
+      quantity,
+      selling_price: sellingPrice,
+      item: itemName,
     },
   ]);
   err3 && errors.push(err3.message);
@@ -59,16 +66,16 @@ export const soldVehicleByCheque = async ({
     {
       company_id: companyId,
       code,
-      amount,
-      details: name,
-      type: "cr",
+      amount: price * quantity,
+      details: itemName,
+      type: "dr",
     },
     {
       company_id: companyId,
       code: code2,
-      amount,
-      details: "Bank",
-      type: "dr",
+      amount: price * quantity,
+      details: itemName,
+      type: "cr",
     },
   ]);
   err4 && errors.push(err4.message);

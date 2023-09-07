@@ -57,23 +57,30 @@ type Props = {
 };
 
 const Cashbook: FC<Props> = ({ cashbook }) => {
-  const totalDrcash = cashbook
-    .filter((c) => c.type === "dr")
-    .map((c) => c.cash)
-    .reduce((a, b) => a + b, 0);
-  const totalDrbank = cashbook
-    .filter((c) => c.type === "dr")
-    .map((c) => c.bank)
-    .reduce((a, b) => a + b, 0);
+  const totalDrcash =
+    cashbook
+      .filter((c) => c.type === "dr")
+      .map((c) => c.cash)
+      .reduce((a, b) => (a ?? 0) + (b ?? 0), 0) ?? 0;
 
-  const totalCrcash = cashbook
-    .filter((c) => c.type === "cr")
-    .map((c) => c.cash)
-    .reduce((a, b) => a + b, 0);
-  let totalCrbank = cashbook
-    .filter((c) => c.type === "cr")
-    .map((c) => c.bank)
-    .reduce((a, b) => a + b, 0);
+  const totalDrbank =
+    cashbook
+      .filter((c) => c.type === "dr")
+      .map((c) => c.bank)
+      .reduce((a, b) => (a ?? 0) + (b ?? 0), 0) ?? 0;
+
+  const totalCrcash =
+    cashbook
+      .filter((c) => c.type === "cr")
+      .map((c) => c.cash)
+      .reduce((a, b) => (a ?? 0) + (b ?? 0), 0) ?? 0;
+
+  let totalCrbank =
+    cashbook
+      .filter((c) => c.type === "cr")
+      .map((c) => c.bank)
+      .reduce((a, b) => (a ?? 0) + (b ?? 0), 0) ?? 0;
+
   const balCash = totalDrcash - totalCrcash;
   const balBank = totalDrbank - totalCrbank;
   const totalBankBal = balBank < 0 ? totalCrbank : balBank;
@@ -139,7 +146,7 @@ const Cashbook: FC<Props> = ({ cashbook }) => {
               </td>
               <td className="center">
                 {balBank === 0 && "-"}
-                {balBank < 0 && "(" + numberWithCommas(totalBankBal) + ")"}
+                {balBank < 0 && "(" + numberWithCommas(totalBankBal ?? 0) + ")"}
                 {balBank > 0 && numberWithCommas(balBank)}
               </td>
               <td></td>
@@ -153,18 +160,18 @@ const Cashbook: FC<Props> = ({ cashbook }) => {
               </td>
               <td></td>
               <td className="center underline">
-                {totalDrcash === 0 ? "-" : numberWithCommas(totalDrcash)}
+                {totalDrcash === 0 ? "-" : numberWithCommas(totalDrcash || 0)}
               </td>
               <td className="center underline">
-                {totalDrbank === 0 ? "-" : numberWithCommas(totalDrbank)}
+                {totalDrbank === 0 ? "-" : numberWithCommas(totalDrbank || 0)}
               </td>
               <td></td>
               <td></td>
               <td className="center underline">
-                {totalDrcash === 0 ? "-" : numberWithCommas(totalDrcash)}
+                {totalDrcash === 0 ? "-" : numberWithCommas(totalDrcash || 0)}
               </td>
               <td className="center underline">
-                {totalDrbank === 0 ? "-" : numberWithCommas(totalDrbank)}
+                {totalDrbank === 0 ? "-" : numberWithCommas(totalDrbank || 0)}
               </td>
             </tr>
           </tbody>

@@ -469,7 +469,7 @@ export interface Database {
           item: string;
           price: number;
           quantity: number;
-          quantity_sold: number;
+          quantity_sold: number | null;
           selling_price: number;
           updatedat: string | null;
           updatedby: string | null;
@@ -482,7 +482,7 @@ export interface Database {
           item: string;
           price: number;
           quantity: number;
-          quantity_sold: number;
+          quantity_sold?: number | null;
           selling_price: number;
           updatedat?: string | null;
           updatedby?: string | null;
@@ -495,7 +495,7 @@ export interface Database {
           item?: string;
           price?: number;
           quantity?: number;
-          quantity_sold?: number;
+          quantity_sold?: number | null;
           selling_price?: number;
           updatedat?: string | null;
           updatedby?: string | null;
@@ -603,7 +603,14 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      increment_sold_stock: {
+        Args: {
+          quantity: number;
+          company_id: string;
+          item: string;
+        };
+        Returns: undefined;
+      };
     };
     Enums: {
       account_status: "active" | "suspended" | "deleted";

@@ -8,6 +8,7 @@ const PrintButton: FC<Props> = ({ componentRef }) => {
   const handlePrint = useReactToPrint({
     content: () => componentRef?.current,
   });
+
   return (
     <button
       className="btn-flat right waves-effect waves-teal shadow"

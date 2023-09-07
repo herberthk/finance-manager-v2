@@ -6,13 +6,13 @@ import { generateCode } from "@/utils";
 type Params = {
   companyId: string;
   amount: number;
-  name: string;
+  details: string;
 };
 
 export const buyMachineByCash = async ({
   amount,
   companyId,
-  name,
+  details,
 }: Params): Promise<{ errors: string[] }> => {
   const errors: string[] = [];
   const supabase = createClientComponentClient<Database>();
@@ -24,7 +24,7 @@ export const buyMachineByCash = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
       type: "cr",
     },
   ]);
@@ -37,7 +37,7 @@ export const buyMachineByCash = async ({
       company_id: companyId,
       code,
       cash: amount,
-      details: `Paid ${name} by cash`,
+      details,
       type: "cr",
     },
   ]);
@@ -49,7 +49,7 @@ export const buyMachineByCash = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
     },
   ]);
   err3 && errors.push(err3.message);
@@ -61,14 +61,14 @@ export const buyMachineByCash = async ({
       company_id: companyId,
       code,
       amount,
-      details: name,
+      details,
       type: "dr",
     },
     {
       company_id: companyId,
       code: code2,
       amount,
-      details: "Cash",
+      details,
       type: "cr",
     },
   ]);
