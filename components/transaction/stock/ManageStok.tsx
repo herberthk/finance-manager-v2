@@ -1,3 +1,4 @@
+"use client";
 import M from "materialize-css";
 import React, { useEffect } from "react";
 

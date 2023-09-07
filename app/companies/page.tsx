@@ -3,18 +3,9 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
-import { cache } from "react";
 
 import ListAndCreateCompany from "@/components/company/create/CreateCompany";
 import type { Database } from "@/types";
-
-// export const dynamic = "force-dynamic"; //clodflare solution
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const createServerSupabaseClient = cache(() => {
-  const cookieStore = cookies();
-  return createServerComponentClient<Database>({ cookies: () => cookieStore });
-});
 
 const Page = async (): Promise<React.JSX.Element> => {
   const supabase = createServerComponentClient<Database>({ cookies });

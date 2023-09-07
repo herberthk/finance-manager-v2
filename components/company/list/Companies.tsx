@@ -2,10 +2,10 @@
 import Link from "next/link";
 import type { FC } from "react";
 
-import type { Company } from "@/types";
+import type { CompanyType } from "@/types";
 
 type CompanyProps = {
-  company: Company;
+  company: CompanyType;
 };
 
 const List: FC<CompanyProps> = ({ company }) => {
@@ -29,7 +29,7 @@ const List: FC<CompanyProps> = ({ company }) => {
 };
 
 type CompaniesProp = {
-  companies: Company[];
+  companies: CompanyType[];
 };
 
 const Companies: FC<CompaniesProp> = ({ companies }) => {

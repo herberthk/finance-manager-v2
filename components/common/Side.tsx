@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React from "react";
 
-import { accountsLinks, reportLinks, transactionLinks } from "@/utils/links/links";
+import { accountsLinks, reportLinks, transactionLinks } from "@/utils";
 import { useCompanyStore } from "@/zustand";
 
 import { Collapsible } from "./comps";

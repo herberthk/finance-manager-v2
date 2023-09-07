@@ -1,9 +1,9 @@
-import dayjs from "dayjs";
+"use client";
 import type { FC } from "react";
 import React, { useRef } from "react";
 
 import type { CashbooKType } from "@/types";
-import { numberWithCommas } from "@/utils/helpers";
+import { getDate, numberWithCommas } from "@/utils";
 
 import AccountTop from "../common/AccoutTop";
 import { TableHead } from "../common/comps";
@@ -20,7 +20,7 @@ const Debit: FC<Partial<CashbooKType>> = ({
 }) => {
   return (
     <tr>
-      <td>{dayjs(createdat).format("DD/MM/YYYY")}</td>
+      <td>{getDate(createdat)}</td>
       <td>{details}</td>
       <td className="center">{!cash ? "-" : numberWithCommas(cash)}</td>
       <td className="center">{!bank ? "-" : numberWithCommas(bank)}</td>
@@ -44,7 +44,7 @@ const Credit: FC<Partial<CashbooKType>> = ({
       <td></td>
       <td></td>
       <td></td>
-      <td>{dayjs(createdat).format("DD/MM/YYYY")}</td>
+      <td>{getDate(createdat)}</td>
       <td>{details}</td>
       <td className="center">{!cash ? "-" : numberWithCommas(cash)}</td>
       <td className="center">{!bank ? "-" : numberWithCommas(bank)}</td>

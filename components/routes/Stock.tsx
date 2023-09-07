@@ -1,9 +1,9 @@
-import dayjs from "dayjs";
+"use client";
 import type { FC } from "react";
 import React, { useRef } from "react";
 
 import type { StockType } from "@/types";
-import { numberWithCommas } from "@/utils";
+import { getDate, numberWithCommas } from "@/utils";
 
 import AccountTop from "../common/AccoutTop";
 import PrintButton from "../common/Print";
@@ -18,7 +18,7 @@ const Item: FC<Partial<StockType>> = ({
 }) => {
   return (
     <tr>
-      <td>{dayjs(createdat).format("DD/MM/YYYY")}</td>
+      <td>{getDate(createdat)}</td>
       <td>{item}</td>
       <td className="center">{numberWithCommas(quantity ?? 0)}</td>
       <td className="center">{numberWithCommas(price ?? 0)}</td>

@@ -1,11 +1,4 @@
-export const printContent = (el: string): void => {
-  const restorepage = document.body.innerHTML;
-  const printcontent = document.getElementById(el)?.innerHTML;
-  //@ts-ignore
-  document.body.innerHTML = printcontent;
-  window.print();
-  document.body.innerHTML = restorepage;
-};
+import dayjs from "dayjs";
 
 export const upperFirst = (str: string): string =>
   str.charAt(0).toUpperCase() + str.slice(1);
@@ -27,3 +20,6 @@ export const removeSeparators = (n: string): string => {
 export const numberWithCommas = (x: number): string => {
   return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export const getDate = (date?: string): string =>
+  date ? dayjs(date).format("DD/MM/YYYY") : dayjs().format("DD/MM/YYYY");

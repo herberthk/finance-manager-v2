@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
 import type { FC } from "react";
 import React from "react";
 import styled from "styled-components";
 
+import { getDate } from "@/utils";
 import { useCompanyStore } from "@/zustand";
 const Container = styled.div`
   display: flex;
@@ -36,7 +36,7 @@ const AccountTop: FC<Props> = ({ account }) => {
         {company?.location}, {company?.email}
       </p>
       <h6>{account}</h6>
-      <p>As of {dayjs().format("DD/MM/YYYY")}</p>
+      <p>As of {getDate()}</p>
     </Container>
   );
 };
