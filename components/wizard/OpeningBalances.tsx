@@ -1,6 +1,8 @@
+import ClassNames from "classnames";
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
+import { validateNumber } from "@/utils";
 import { useCreateCompanyStore } from "@/zustand";
 
 const OpeningBalances = (): React.ReactNode => {
@@ -42,6 +44,7 @@ const OpeningBalances = (): React.ReactNode => {
     }
     prevStep();
   };
+
   return (
     <>
       <div className="center">
@@ -49,13 +52,13 @@ const OpeningBalances = (): React.ReactNode => {
           <i className="material-icons prefix">attach_money</i>
           <input
             value={cashBal}
-            onChange={(e) => setCashBal(e.target.value)}
-            id="twt"
+            onChange={(e) => setCashBal(validateNumber(+e.target.value))}
+            id="cb"
             type="number"
             className="input_border"
             placeholder="0"
           />
-          <label className="teal-text" htmlFor="twt">
+          <label className={ClassNames("teal-text")} htmlFor="cb">
             Opening cash balance
           </label>
         </div>
@@ -64,13 +67,13 @@ const OpeningBalances = (): React.ReactNode => {
         <i className="material-icons prefix">attach_money</i>
         <input
           value={bankBal}
-          onChange={(e) => setBankBal(e.target.value)}
-          id="bl"
+          onChange={(e) => setBankBal(validateNumber(+e.target.value))}
+          id="bb"
           type="number"
           className="input_border"
           placeholder="0"
         />
-        <label className="teal-text" htmlFor="bl">
+        <label className="teal-text" htmlFor="bb">
           Opening bank balance
         </label>
       </div>

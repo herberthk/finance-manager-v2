@@ -23,3 +23,6 @@ export const numberWithCommas = (x: number): string => {
 
 export const getDate = (date?: string): string =>
   date ? dayjs(date).format("DD/MM/YYYY") : dayjs().format("DD/MM/YYYY");
+
+export const validateNumber = (num: number): number =>
+  Math.round(num) <= Number.MAX_SAFE_INTEGER && Math.round(num) > 0 ? num : 0;

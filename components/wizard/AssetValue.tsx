@@ -1,6 +1,7 @@
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
+import { validateNumber } from "@/utils";
 import { useCreateCompanyStore } from "@/zustand";
 
 const AssetValue = (): React.ReactNode => {
@@ -70,7 +71,7 @@ const AssetValue = (): React.ReactNode => {
               <i className="material-icons prefix">attach_money</i>
               <input
                 value={landValue}
-                onChange={(e) => setLandValue(e.target.value)}
+                onChange={(e) => setLandValue(validateNumber(+e.target.value))}
                 id="land"
                 type="number"
                 className="input_border"
@@ -86,7 +87,9 @@ const AssetValue = (): React.ReactNode => {
               <i className="material-icons prefix">attach_money</i>
               <input
                 value={machineValue}
-                onChange={(e) => setMachineValue(e.target.value)}
+                onChange={(e) =>
+                  setMachineValue(validateNumber(+e.target.value))
+                }
                 id="machine"
                 type="number"
                 className="input_border"
@@ -102,7 +105,9 @@ const AssetValue = (): React.ReactNode => {
               <i className="material-icons prefix">attach_money</i>
               <input
                 value={vehicleValue}
-                onChange={(e) => setVehicleValue(e.target.value)}
+                onChange={(e) =>
+                  setVehicleValue(validateNumber(+e.target.value))
+                }
                 id="vehicle"
                 type="number"
                 className="input_border"

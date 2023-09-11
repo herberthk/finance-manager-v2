@@ -112,29 +112,29 @@ export const useCreateCompanyStore = create<CreateCompanyState>()(
             assetSkipped: status,
           }));
         },
-        setLandValue: (amount: string) => {
+        setLandValue: (amount: number) => {
           set(() => ({
-            landValue: +amount,
+            landValue: amount,
           }));
         },
-        setMachineValue: (amount: string) => {
+        setMachineValue: (amount: number) => {
           set(() => ({
-            machineValue: +amount,
+            machineValue: amount,
           }));
         },
-        setVehicleValue: (amount: string) => {
+        setVehicleValue: (amount: number) => {
           set(() => ({
-            vehicleValue: +amount,
+            vehicleValue: amount,
           }));
         },
-        setBankBalance: (amount: string) => {
+        setBankBalance: (amount: number) => {
           set(() => ({
-            bankBalance: +amount,
+            bankBalance: amount,
           }));
         },
-        setCashBalance: (amount: string) => {
+        setCashBalance: (amount: number) => {
           set(() => ({
-            cashBalance: +amount,
+            cashBalance: amount,
           }));
         },
         setName: (name: string) => {

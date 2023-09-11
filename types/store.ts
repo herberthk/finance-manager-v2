@@ -28,11 +28,11 @@ export interface CreateCompanyState {
   resetProgressData: () => void;
   nextStep: () => void;
   prevStep: () => void;
-  setBankBalance: (amount: string) => void;
-  setCashBalance: (amount: string) => void;
-  setLandValue: (amount: string) => void;
-  setMachineValue: (amount: string) => void;
-  setVehicleValue: (amount: string) => void;
+  setBankBalance: (amount: number) => void;
+  setCashBalance: (amount: number) => void;
+  setLandValue: (amount: number) => void;
+  setMachineValue: (amount: number) => void;
+  setVehicleValue: (amount: number) => void;
   setName: (name: string) => void;
   setDescription: (desc: string) => void;
   setAccount: (account: string) => void;

@@ -16,6 +16,7 @@
     "@mui/material": "^5.14.3",
     "@supabase/auth-helpers-nextjs": "^0.7.4",
     "@supabase/supabase-js": "^2.33.1",
+    "classnames": "^2.3.2",
     "dayjs": "^1.11.9",
     "framer-motion": "^10.12.18",
     "lodash": "^4.17.21",
