@@ -2,6 +2,7 @@ import M from "materialize-css";
 import type { FC } from "react";
 import React, { useState } from "react";
 
+import { useCompanyStore } from "@/store";
 import {
   sellLandByCash,
   SellLandByCheque,
@@ -11,7 +12,6 @@ import {
   sellVehicleByCheque,
 } from "@/transactions";
 import { numberWithCommas } from "@/utils";
-import { useCompanyStore } from "@/zustand";
 
 type Name = "land" | "machine" | "vehicle" | "";
 type Account = "cash" | "bank" | "";

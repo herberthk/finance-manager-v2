@@ -2,9 +2,9 @@ import M from "materialize-css";
 import type { FC } from "react";
 import React, { useState } from "react";
 
+import { useCompanyStore } from "@/store";
 import { buyStockWithCash, buyStockWithCheque } from "@/transactions";
 import { numberWithCommas } from "@/utils";
-import { useCompanyStore } from "@/zustand";
 
 type Account = "cash" | "bank" | "";
 type Props = {

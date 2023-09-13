@@ -1,7 +1,7 @@
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
-import { useCreateCompanyStore } from "@/zustand";
+import { useCreateCompanyStore } from "@/store";
 
 const Step5 = (): React.ReactNode => {
   useEffect(() => {

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import type { FC } from "react";
 import React, { useState } from "react";
 
+import { useCreateCompanyStore } from "@/store";
 import {
   initialLandTransaction,
   initialMachineTransaction,
@@ -12,7 +13,6 @@ import {
 } from "@/transactions";
 import type { Database } from "@/types";
 import { numberWithCommas } from "@/utils";
-import { useCreateCompanyStore } from "@/zustand";
 
 import { Collapsible } from "../common/comps";
 

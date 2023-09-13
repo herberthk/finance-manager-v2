@@ -4,7 +4,7 @@ import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
 import * as React from "react";
 
-import { useCreateCompanyStore } from "@/zustand";
+import { useCreateCompanyStore } from "@/store";
 
 const steps = [
   "Basic information",

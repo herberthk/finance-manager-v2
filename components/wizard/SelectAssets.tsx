@@ -3,8 +3,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import React from "react";
 
+import { useCreateCompanyStore } from "@/store";
 import type { AssetType } from "@/types";
-import { useCreateCompanyStore } from "@/zustand";
 
 const SelectAssets = (): React.ReactNode => {
   const nextStep = useCreateCompanyStore((state) => state.nextStep);

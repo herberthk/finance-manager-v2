@@ -2,8 +2,8 @@ import type { FC } from "react";
 import React from "react";
 import styled from "styled-components";
 
+import { useCompanyStore } from "@/store";
 import { getDate } from "@/utils";
-import { useCompanyStore } from "@/zustand";
 const Container = styled.div`
   display: flex;
   flex-direction: column;

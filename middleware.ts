@@ -1,10 +1,12 @@
-import { Database } from "@/types/database.types";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import type { NextRequest } from "next/server";
+import type { Database } from "@/types/database.types";
 
-export async function middleware(req: NextRequest) {
+export const middleware = async (
+  req: NextRequest,
+): Promise<NextResponse<unknown>> => {
   const res = NextResponse.next();
 
   // Create a Supabase client configured to use cookies
@@ -15,4 +17,4 @@ export async function middleware(req: NextRequest) {
   await supabase.auth.getSession();
 
   return res;
-}
+};

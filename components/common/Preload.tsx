@@ -1,3 +1,4 @@
+"use client";
 import type { CSSProperties } from "react";
 import React from "react";
 import styled from "styled-components";
@@ -78,11 +79,11 @@ const View = styled.div`
   }
 `;
 const styles: CSSProperties = {
-  position: "absolute",
-  top: 0,
-  left: 0,
+  // position: "absolute",
+  // top: 0,
+  // left: 0,
   width: "100%",
-  height: "100vh",
+  height: "600px",
   background: "linear-gradient( #0654b9, #003171)",
   display: "flex",
   flexDirection: "column",

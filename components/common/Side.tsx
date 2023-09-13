@@ -2,11 +2,10 @@
 import Link from "next/link";
 import React from "react";
 
+import { useCompanyStore } from "@/store";
 import { accountsLinks, reportLinks, transactionLinks } from "@/utils";
-import { useCompanyStore } from "@/zustand";
 
 import { Collapsible } from "./comps";
-// import SetupModal from "./SetupModal";
 
 const Side = (): React.ReactNode => {
   const id = useCompanyStore((state) => state.company?.id);

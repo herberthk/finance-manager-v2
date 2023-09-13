@@ -3,9 +3,9 @@ import M from "materialize-css";
 import type { FC } from "react";
 import React, { useEffect, useState } from "react";
 
+import { useCompanyStore } from "@/store";
 import { payExpenseByCash, payExpenseByCheque } from "@/transactions";
 import { numberWithCommas } from "@/utils";
-import { useCompanyStore } from "@/zustand";
 
 type Account = "cash" | "bank" | "";
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useCreateCompanyStore } from "@/zustand";
+import { useCreateCompanyStore } from "@/store";
 
 const Intro = (): React.ReactNode => {
   const nextStep = useCreateCompanyStore((state) => state.nextStep);

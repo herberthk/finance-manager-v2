@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import React from "react";
 import styled from "styled-components";
 
-import { useCompanyStore } from "@/zustand";
+import { useCompanyStore } from "@/store";
 // import logo from '../../asset/logo.png';
 const Container = styled(motion.div)`
   width: 100%;

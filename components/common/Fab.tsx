@@ -4,10 +4,12 @@ import M from "materialize-css";
 import { useRouter } from "next/navigation";
 import React, { useLayoutEffect } from "react";
 
+import { useCompanyStore } from "@/store";
 import type { Database } from "@/types/database.types";
 
 const Fab = (): React.ReactNode => {
   const router = useRouter();
+  const resetCompany = useCompanyStore((state) => state.resetCompany);
   useLayoutEffect(() => {
     M.AutoInit();
   }, []);
@@ -15,6 +17,7 @@ const Fab = (): React.ReactNode => {
   const supabase = createClientComponentClient<Database>();
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    resetCompany();
     router.refresh();
   };
   return (

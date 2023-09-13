@@ -2,10 +2,10 @@ import M from "materialize-css";
 import type { FC } from "react";
 import React, { useState } from "react";
 
+import { useCompanyStore } from "@/store";
 import { sellStockWithCash, sellStockWithCheque } from "@/transactions";
 import type { StockType } from "@/types";
 import { numberWithCommas } from "@/utils/helpers";
-import { useCompanyStore } from "@/zustand";
 
 type Account = "cash" | "bank" | "";
 

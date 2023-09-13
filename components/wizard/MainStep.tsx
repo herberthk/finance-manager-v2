@@ -2,8 +2,8 @@ import M from "materialize-css";
 import type { FC } from "react";
 import React, { useLayoutEffect } from "react";
 
+import { useCreateCompanyStore } from "@/store";
 import type { Database } from "@/types/database.types";
-import { useCreateCompanyStore } from "@/zustand";
 
 import { RightComp } from "../common/comps";
 import AssetValue from "./AssetValue";

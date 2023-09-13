@@ -2,8 +2,8 @@ import ClassNames from "classnames";
 import M from "materialize-css";
 import React, { useEffect } from "react";
 
+import { useCreateCompanyStore } from "@/store";
 import { validateNumber } from "@/utils";
-import { useCreateCompanyStore } from "@/zustand";
 
 const OpeningBalances = (): React.ReactNode => {
   useEffect(() => {
@@ -51,7 +51,7 @@ const OpeningBalances = (): React.ReactNode => {
         <div className="input-field col s12 ">
           <i className="material-icons prefix">attach_money</i>
           <input
-            value={cashBal}
+            value={cashBal || ""}
             onChange={(e) => setCashBal(validateNumber(+e.target.value))}
             id="cb"
             type="number"
@@ -66,7 +66,7 @@ const OpeningBalances = (): React.ReactNode => {
       <div className="input-field col s12 ">
         <i className="material-icons prefix">attach_money</i>
         <input
-          value={bankBal}
+          value={bankBal || ""}
           onChange={(e) => setBankBal(validateNumber(+e.target.value))}
           id="bb"
           type="number"

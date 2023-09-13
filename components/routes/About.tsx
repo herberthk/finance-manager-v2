@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import M from "materialize-css";
 import React, { useLayoutEffect } from "react";
 
+import { useCompanyStore } from "@/store";
 import { routeVariants } from "@/utils";
-import { useCompanyStore } from "@/zustand";
 
 import { Collapsible } from "../common/comps";
 
